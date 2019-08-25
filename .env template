@@ -1,0 +1,12 @@
+//Spotify Client ID
+CLIENT_ID = FILL ME IN
+
+//Spotify Client Secret
+CLIENT_SECRET = FILL ME IN
+
+//Spotify Redirect
+SPOTIFY_REDIRECT = http://localhost:8080/dist/savelogininfo.html
+# SPOTIFY_REDIRECT = http://localhost:8080/dist/
+
+//port for server;
+PORT = 8080;
