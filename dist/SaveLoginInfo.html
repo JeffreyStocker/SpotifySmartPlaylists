@@ -1,0 +1,9 @@
+<html>
+  <script type="text/javascript">
+    const params = location.search;
+    const code = params.match(/code=(\S+)(?:&|$)/);
+    const state = params.match(/state=(\S+)(?:&|$)/);
+    window.localStorage.setItem('code', code[1])
+    window.close();
+  </script>
+</html>
