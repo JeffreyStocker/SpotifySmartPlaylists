@@ -1,13 +1,19 @@
 const dotEnv = require('dotenv').config();
-const express = require ('express');
 
-const authorize = require('./spotify/authorize');
+const koa = require ('koa');
+const static = require ('koa-static')
+const Router = require ('koa-router');
+const path = require ('path')
+const bodyParser = require('koa-bodyparser');
 
-const app = express();
+const authorize = require('./routes/authorize');
+const database = require ('./database/database');
+
+const app = new koa();
 const port = Number(process.env.PORT) || 8080;
 
-app.use(express.static('/dist'));
+app.use (bodyParser());
+app.use(static(__dirname + '/../dist'))
+app.use(authorize.routes(), authorize.allowedMethods());
 
-app.route('/authorize', authorize)
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`App listening on port ${port}!`))
