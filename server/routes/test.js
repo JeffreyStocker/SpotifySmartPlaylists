@@ -9,8 +9,14 @@ const route = new koaRouter();
 route.get('/test', async (ctx) => {
   const id = ctx.query.id;
   const userData = await dbUser.getUser({id});
-  const retrievedTracks = await getLikedSongs(userData.accessToken);
-  const retrievedAlbums = await getLikedAlbums(userData.accessToken);
+  let {accessToken} = userData;
+
+  if (userData.isExpired()) {
+    accessToken = await dbUser.getAndUpdateRefreshToken(accessToken)
+  }
+
+  const retrievedTracks = await getLikedSongs(accessToken);
+  const retrievedAlbums = await getLikedAlbums(accessToken);
   ctx.body = {tracks: retrievedTracks, albums: retrievedAlbums};
   return
 })
