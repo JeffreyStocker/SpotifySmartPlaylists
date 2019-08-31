@@ -6,7 +6,8 @@ const usersSchema = mongoose.Schema({
   accessToken: String,
   id: {
     type: String,
-    isRequired: true
+    isRequired: true,
+    unique: true
   },
   name: String,
   refreshToken: String,
@@ -15,15 +16,64 @@ const usersSchema = mongoose.Schema({
     default: [],
     required: false
   },
+  updatedAccessToken: Date,
   updated: {
     default: new Date(),
     type: Date
+  },
+  refreshTokenExpires: {
+    type: Number,
+    required: true
   }
 })
+
+/**
+ * @description Determines if the access token is expired
+ * @returns Boolean
+ */
+usersSchema.method('isExpired', function (...args) {
+  const {refreshTokenExpires, updatedAccessToken} = this;
+  if ((Date.now() - updatedAccessToken) * 1000 > (refreshTokenExpires - 10000)) {
+    return true;
+  } else {
+    return false;
+  }
+})
+
+/**
+ * Middleware, keeps updated whenever saving
+ *
+ * @param {function} next calls the next middleware
+ *
+ */
+const updateDate = function updateDate (next) {
+  this.updated = Date.now()
+  next();
+}
+
+/**
+ * @description keeps updated updated when update is called
+ */
+usersSchema.pre('update', updateDate)
+
+/**
+* @description keeps updated updated when findOneAndUpdate is called
+*/
+usersSchema.pre('findOneAndUpdate', updateDate)
+
+/**
+ * @description keeps updated updated when save is called
+ */
+usersSchema.pre('save', updateDate)
 
 const Users = mongoose.model('users', usersSchema);
 
 const createUser = async function (name) {
+  const now = new Date();
+  Object.assign(name, {
+    updatedAccessToken: now
+  })
+
   const user = new Users(name);
   return user.save();
 }
@@ -51,8 +101,19 @@ const createOrUpdateUser = function createOrUpdateUser (dataToSave) {
 const getAndUpdateRefreshToken = async function (accessToken) {
   const query = {accessToken: accessToken};
   const doc = await Users.findOne(query).exec();
-  const {access_token, refresh_token} = await refreshToken(doc.refresh_token);
-  await Users.updateOne(query, {access_token, refresh_token}).exec();
+  const {access_token, expires_in} = await getRefreshToken(doc.refreshToken);
+  const now = new Date();
+
+  doc.refreshTokenExpires = expires_in;
+  doc.accessToken = access_token;
+  doc.updated = now
+  doc.updatedAccessToken = now
+
+  await doc.save()
+    .then(results => {
+      console.log (results)
+    })
+
   return access_token;
 }
 
