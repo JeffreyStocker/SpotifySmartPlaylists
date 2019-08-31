@@ -12,7 +12,6 @@ const generateBasicAuthorizationStr = function generateBasicAuthorizationStr (cl
   return "Basic " + new Buffer(clientID+":"+clientSECRET).toString('base64')
 }
 
-
 const clientCredentialsFlow = function clientCredentialsFlow (code) {
   console.log(clientID, clientSECRET)
   return axios.post('https://accounts.spotify.com/api/token',
@@ -69,7 +68,7 @@ const getRefreshToken = function getRefreshToken (refreshToken) {
     },
   })
     .then((res) => {
-      return res;
+      return res.data;
     })
     .catch (err => {
       console.error(err)
