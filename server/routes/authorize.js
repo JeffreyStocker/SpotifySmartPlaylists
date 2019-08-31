@@ -8,7 +8,7 @@ const {createOrUpdateUser} = require ('../database/users');
 router.post('/authorize', async function (ctx, next) {
   const code = ctx.request.body.code;
   const tokenData = await getToken(code);
-  const {access_token, refresh_token} = tokenData;
+  const {access_token, refresh_token, expires_in} = tokenData;
 
   const [userData, playlists] = await Promise.all ([await getUserData(access_token), await getPlaylists(access_token)])
 
@@ -16,7 +16,8 @@ router.post('/authorize', async function (ctx, next) {
     id: userData.id,
     name: userData.display_name,
     accessToken: access_token,
-    refreshToken: refresh_token
+    refreshToken: refresh_token,
+    refreshTokenExpires: expires_in,
   })
 
   ctx.body = {
