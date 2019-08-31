@@ -66,7 +66,6 @@ usersSchema.pre('findOneAndUpdate', updateDate)
  */
 usersSchema.pre('save', updateDate)
 
-const Users = mongoose.model('users', usersSchema);
 
 const createUser = async function (name) {
   const now = new Date();
@@ -116,6 +115,8 @@ const getAndUpdateRefreshToken = async function (accessToken) {
 
   return access_token;
 }
+
+const Users = mongoose.model('users', usersSchema);
 
 module.exports = {
   model: Users,
