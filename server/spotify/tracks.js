@@ -1,34 +1,37 @@
-const axios = require ('axios');
-const genAuthHeader = require('./authorize').generateAccessAuthorizationStr;
+const {getFromSpotify} = require ('./spotifyRequest');
+const _flatten = require('lodash/flatten')
+const {TRACKS_TRACKS_URL} = require ('../constants');
+
+const REQUEST_LIMIT = 50;
 
 const requestTracks =  function getTracks (accessToken, ids = []) {
-  return axios.get('https://api.spotify.com/v1/tracks', {
-    headers: {
-      Authorization: genAuthHeader(accessToken)
-    },
+  return getFromSpotify(TRACKS_TRACKS_URL, accessToken, {
     params: {
       ids: ids.join(',')
     }
-  }).then (res => {
-    return res.tracks;
+  })
+  .then (res => {
+    return res.data;
   });
 }
 
-module.exports = {
-  async getTracks (accessToken, ids = []) {
-    try {
-      const tracks = [];
-      if (ids.length < 51) {
-        return requestTracks(accessToken, ids);
-      }
-      for (let i = 0; i < ids.length; i += 50) {
-        const diff = ids.length - i;
-        tracks.push(requestTracks(accessToken, ids.slice(i, diff < 50 ? ids.length - i : ids.length - 1)))
-      }
-      await Promise.all(tracks);
-    } catch (err) {
-      console.error(err)
+const getTracks = async function getTracks (accessToken, ids = []) {
+  const tracks = [];
+  if (ids.length < REQUEST_LIMIT + 1) {
+    tracks.push(requestTracks(accessToken, ids));
+  } else {
+    for (let i = 0; i < ids.length; i += REQUEST_LIMIT) {
+      const diff = ids.length - i;
+      tracks.push(
+        requestTracks(accessToken, ids.slice(i, diff < REQUEST_LIMIT ? ids.length - i : ids.length - 1))
+      )
     }
-
   }
+  const retrievedTracks = await Promise.all(tracks);
+  return _flatten(retrievedTracks);
+}
+
+module.exports = {
+  getTracks,
+  requestTracks
 }
