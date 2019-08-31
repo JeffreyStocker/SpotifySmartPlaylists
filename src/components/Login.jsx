@@ -1,7 +1,20 @@
 import React from 'react';
 import axios from 'axios';
+import qs from 'qs';
 
-const link = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${process.env.SPOTIFY_REDIRECT}`;
+const link_backup = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${process.env.SPOTIFY_REDIRECT}`;
+const linkOptions = {
+  scope: [
+    'user-library-read',
+    'playlist-read-private',
+    'playlist-modify-private',
+    'playlist-modify-public']
+    .join(' '),
+  response_type: 'code',
+  redirect_uri: process.env.SPOTIFY_REDIRECT,
+  client_id: process.env.CLIENT_ID,
+}
+const link = `https://accounts.spotify.com/authorize?${qs.stringify(linkOptions)}`
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -22,7 +35,6 @@ export default class Login extends React.Component {
       axios.post('/authorize', {code})
       .then(response => {
         this.setState({code: code});
-        debugger;
         if (response.status === 200) {
           console.log ('response', response.status, response.data)
           }

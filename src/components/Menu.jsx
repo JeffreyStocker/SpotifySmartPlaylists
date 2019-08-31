@@ -8,6 +8,7 @@ export default function Menu () {
     <div className="menu">
       {buttonNames.map(name => <button className="button" key={name}>{name}</button>)}
       <button><Login></Login></button>
+      <a href="/test?id=kagesennin"><button className="button">test</button></a>
 
     </div>
   )
