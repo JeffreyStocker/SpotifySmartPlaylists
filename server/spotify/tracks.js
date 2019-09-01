@@ -20,9 +20,9 @@ const getTracks = async function getTracks (accessToken, ids = []) {
 }
 
 const eachTrack = function eachTrack (tracks, callback, options = {}) {
-  options = createOptions({ignoreLocal: false}, options);
+  options = createOptions({ignoreLocal: true}, options);
   tracks.forEach((track, index, tracks) => {
-    !ignoreLocal && !track.track.is_local && callback(track.track, index, tracks);
+    (options.ignoreLocal && track.track.is_local) || callback(track.track, index, tracks);
   })
 }
 
@@ -30,13 +30,15 @@ const eachTrack = function eachTrack (tracks, callback, options = {}) {
  * @param {Array} tracks list of tracks as returned from spotify api
  * @return {Promise<Set>} containing ids of all albums from tracks
  */
-const getAllAlbumsIdsFromTracks = function (tracks = []) {
+const getAllAlbumsIdsFromTracks = function (tracks = [], options = {}) {
+  options = createOptions({ignoreLocal: true}, options);
+
+  const albums = new Set();
   return new Promise ((resolve) => {
-    const albums = new Set();
     eachTrack(tracks, (track) => {
       let albumID = track.album.id;
       albums.add(albumID);
-    })
+    }, options)
     resolve(albums);
   })
 }
