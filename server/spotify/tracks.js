@@ -26,8 +26,24 @@ const eachTrack = function eachTrack (tracks, callback, options = {}) {
   })
 }
 
+/**
+ * @param {Array} tracks list of tracks as returned from spotify api
+ * @return {Promise<Set>} containing ids of all albums from tracks
+ */
+const getAllAlbumsIdsFromTracks = function (tracks = []) {
+  return new Promise ((resolve) => {
+    const albums = new Set();
+    eachTrack(tracks, (track) => {
+      let albumID = track.album.id;
+      albums.add(albumID);
+    })
+    resolve(albums);
+  })
+}
+
 module.exports = {
   getTracks,
   requestTracks,
-  eachTrack
+  eachTrack,
+  getAllAlbumsIdsFromTracks
 }
