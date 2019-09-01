@@ -7,7 +7,7 @@ const qs = require('koa-qs');
 
 const authorize = require('./routes/authorize');
 const database = require ('./database/database');
-const test = require ('./routes/test');
+const test = require ('./routes/routeTest');
 
 const app = new koa();
 const port = Number(process.env.PORT) || 8080;
