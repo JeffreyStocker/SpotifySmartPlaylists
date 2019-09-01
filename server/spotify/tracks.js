@@ -14,7 +14,7 @@ const requestTracks =  function getTracks (accessToken, ids = []) {
 const getTracks = async function getTracks (accessToken, ids = []) {
   return getFromSpotifyWithLimits(TRACKS_TRACKS_URL, accessToken, {
     params: {
-      id: ids.join(',')
+      ids: ids.join(',')
     }
   })
 }
