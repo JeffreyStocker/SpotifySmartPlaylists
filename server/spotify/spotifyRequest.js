@@ -35,45 +35,40 @@ const getFromSpotify = function getFromSpotify (url, accessToken, options = {}) 
   let firstRun = true;
   const requestOptions = generateRequestOptions(accessToken, options);
   return request(url, requestOptions)
-    .then(res => {
-      if (res.isAxiosError) {
-        switch (res.response.status) {
-          case 401:
+  .catch(err => {
+    switch (err && err.response && err.response.status) {
+      case 401:
+          if (firstRun) {
             firstRun = false;
             return getAndUpdateRefreshToken(accessToken)
               .then(newToken => {
                 const newRequestOptions = generateRequestOptions(newToken, options);
                 return request(url, newRequestOptions)
               })
-            break;
-          case 429:
-            //wip
-            const timeout = err.Retry-After
-            return new Promise ((resolve, revoke) => {
-              setTimeout(() => {
-                getFromSpotify (url, accessToken, options)
-                  .then(resolve)
-                  .catch(revoke)
-              }, timeout)
-            })
-            break;
-          default:
-            break;
-        }
-      } else {
-        return res
+          }
+        break;
+      case 429:
+        //wip
+        const timeout = err.Retry-After
+        return new Promise ((resolve, revoke) => {
+          setTimeout(() => {
+            request (url, accessToken, options)
+            .then(resolve)
+              .catch(revoke)
+            }, timeout)
+        })
+        break;
+      default:
+        break;
       }
     })
     .then (res => {
-      if (res.isAxiosError) {
-        throw new Error (res);
-      }
       return res.data;
     })
-}
+  }
 
-const getFromSpotifyWithLimits = async function getFromSpotifyWithLimits(url, accessToken, options = {}) {
-  const items = [];
+  const getFromSpotifyWithLimits = async function getFromSpotifyWithLimits(url, accessToken, options = {}) {
+    const items = [];
   let next = url;
 
   do {
