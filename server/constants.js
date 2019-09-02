@@ -29,7 +29,7 @@ module.exports = {
 
     //artists
     ARTISTS_GET_ARTIST_URL: 'https://api.spotify.com/v1/artists/{id}',
-    getArtistsURL: (id) => `https://api.spotify.com/v1/artists/${id}`,
+    getArtistURL: (id) => `https://api.spotify.com/v1/artists/${id}`,
     ARTISTS_GET_ARTIST_ALBUMS_URL: 'https://api.spotify.com/v1/artists/{id}/albums',
     getArtistAlbumbsURL: (id) => `https://api.spotify.com/v1/artists/${id}/albums`,
     ARTISTS_GET_ARTIST_TOPTRACKS_URL: 'https://api.spotify.com/v1/artists/{id}/top-tracks',
@@ -37,7 +37,7 @@ module.exports = {
     ARTISTS_GET_ARTIST_RELATED_ARTISTS_URL: 'https://api.spotify.com/v1/artists/{id}/related-artists',
     getArtistsRelatedArtistsURL: (id) => `https://api.spotify.com/v1/artists/${id}/related-artists`,
     ARTISTS_GET_ARTISTS_URL: 'https://api.spotify.com/v1/artists',
-    getArtistURL: () => modules.exports.ARTISTS_GET_ARTISTS_URL,
+    getArtistsURL: () => modules.exports.ARTISTS_GET_ARTISTS_URL,
 
 
     //playlists
