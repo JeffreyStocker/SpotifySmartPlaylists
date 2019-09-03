@@ -1,6 +1,5 @@
-const {getFromSpotify, getFromSpotifyWithLimits} = require ('./spotifyRequest');
-const {getAlbumURL, getAlbumsURL, getAlbumTracksURL, ALBUMS_GET_ALBUMS_MAX_REQUESTS} = require ('../constants');
-const _flatten = require ('lodash/flatten')
+const {getFromSpotify} = require ('./spotifyRequest');
+const {ALBUMS_GET_ALBUMS_URL, getAlbumURL, getAlbumTracksURL, ALBUMS_GET_ALBUMS_MAX_REQUESTS} = require ('../constants');
 
 /**
  *
@@ -21,14 +20,14 @@ const getAlbums = function getAlbums (accessToken, ids) {
   requestsIDs = [];
   for (let i = 0; i < ids.length; i += ALBUMS_GET_ALBUMS_MAX_REQUESTS) {
     const currentIds = ids.slice(i, i + ALBUMS_GET_ALBUMS_MAX_REQUESTS)
-    requestsIDs.push(getFromSpotifyWithLimits(getAlbumsURL(), accessToken, {
+      requestsIDs.push(getFromSpotify(ALBUMS_GET_ALBUMS_URL, accessToken, {
       params: {
         ids: currentIds.join(',')
       }
     }))
   }
   return Promise.all(requestsIDs)
-    .then(albums => albums.reduce ((acc, {albums}) => {
+    .then(albums => albums.reduce ((acc, {albums = []} = {}) => {
       acc.push(...albums);
       return acc;
     }, [])
@@ -47,10 +46,25 @@ const getAllIdsFromAlbums = function (albums = []) {
   return new Promise ((resolve) => {
     const ids = new Set();
     eachAlbum(albums, (album) => {
-      let albumID = album.album.id;
-      ids.add(albumID);
+      if (album && album.id) {
+        let albumID = album.id;
+        ids.add(albumID);
+      }
     })
     resolve(ids);
+  })
+}
+
+const getArtistIdsFromAlbums = function (albums) {
+  return new Promise((resolve) => {
+    const artistIds = [];
+
+    eachAlbum(albums, (album) => {
+      if(album && album.artists) {
+        album.artists.forEach(artist => artist && artist.id && artistIds.push(artist.id));
+      }
+    })
+    resolve(artistIds);
   })
 }
 
@@ -59,5 +73,6 @@ module.exports = {
   getAlbum,
   getAlbums,
   getAlbumTracks,
-  getAllIdsFromAlbums
+  getAllIdsFromAlbums,
+  getArtistIdsFromAlbums
 }
