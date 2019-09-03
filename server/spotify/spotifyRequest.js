@@ -35,55 +35,86 @@ const getFromSpotify = function getFromSpotify (url, accessToken, options = {}) 
   let firstRun = true;
   const requestOptions = generateRequestOptions(accessToken, options);
   return request(url, requestOptions)
+  .then(res => {
+    return res.data;
+  })
   .catch(err => {
-    switch (err && err.response && err.response.status) {
-      case 401:
-          if (firstRun) {
-            firstRun = false;
-            return getAndUpdateRefreshToken(accessToken)
-              .then(newToken => {
-                const newRequestOptions = generateRequestOptions(newToken, options);
-                return request(url, newRequestOptions)
-              })
-          }
-        break;
-      case 429:
-        //wip
-        const timeout = err.Retry-After
-        return new Promise ((resolve, revoke) => {
-          setTimeout(() => {
-            request (url, accessToken, options)
-            .then(resolve)
-              .catch(revoke)
-            }, timeout)
-        })
-        break;
-      default:
-        break;
+    if (err.code === "ECONNREFUSED"){
+      console.log ('err.refused', console.error (err))
+    } else if (err && err.response && err.response.status) {
+      switch (err.response.status) {
+        case 401:
+            if (firstRun) {
+              firstRun = false;
+              return getAndUpdateRefreshToken(accessToken)
+                .then(newToken => {
+                  const newRequestOptions = generateRequestOptions(newToken, options);
+                  return request(url, newRequestOptions)
+                })
+            }
+          break;
+        case 429:
+          //wip
+          const timeout = err.Retry-After
+          return new Promise ((resolve, revoke) => {
+            setTimeout(() => {
+              request (url, accessToken, options)
+              .then(resolve)
+                .catch(revoke)
+              }, timeout)
+          })
+          break;
+        default:
+          break;
+        }
+        return null;
       }
     })
-    .then (res => {
-      return res.data;
-    })
-  }
+}
 
-  const getFromSpotifyWithLimits = async function getFromSpotifyWithLimits(url, accessToken, options = {}) {
-    const items = [];
+const getFromSpotifyWithLimits = async function getFromSpotifyWithLimits(url, accessToken, options = {}) {
+  const items = [];
   let next = url;
 
   do {
     let request = await getFromSpotify(next, accessToken, generateRequestLimitOptions(accessToken, options))
       .then(data => data);
-    ({items: recievedItem, next} = request);
-    items.push(...recievedItem);
+    if (request !== null) {
+      ({items: recievedItem, next} = request);
+      items.push(...recievedItem);
+    }
   } while (next !== null)
   return items;
 }
 
+
+/**
+ *
+ * @param {String} url url target to spotify
+ * @param {String} accessToken access token from spotify
+ * @param {Array} ids array of ids strings
+ * @returns {Promise<array of responses} will return an array of responses from spotify
+ */
+const getFromSpotifyByIds = function getFromSpotifyByIds (url, accessToken, ids) {
+  requestsIDs = [];
+  for (let i = 0; i < ids.length; i += REQUEST_LIMIT) {
+    const currentIds = ids.slice(i, i + REQUEST_LIMIT)
+
+    requestsIDs.push(getFromSpotify(url, accessToken, {
+      params: {
+        ids: currentIds.join(',')
+      }
+    }))
+  }
+  return Promise.all(requestsIDs);
+}
+
 module.exports = {
   getFromSpotifyWithLimits,
-  getFromSpotify
+  getFromSpotify,
+  getFromSpotifyByIds
 }
+
 
 /*
 
