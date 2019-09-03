@@ -37,7 +37,7 @@ module.exports = {
     ARTISTS_GET_ARTIST_RELATED_ARTISTS_URL: 'https://api.spotify.com/v1/artists/{id}/related-artists',
     getArtistsRelatedArtistsURL: (id) => `https://api.spotify.com/v1/artists/${id}/related-artists`,
     ARTISTS_GET_ARTISTS_URL: 'https://api.spotify.com/v1/artists',
-    getArtistsURL: () => modules.exports.ARTISTS_GET_ARTISTS_URL,
+    getArtistsURL: () => module.exports.ARTISTS_GET_ARTISTS_URL,
 
 
     //playlists
