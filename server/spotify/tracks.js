@@ -43,9 +43,24 @@ const getAllAlbumsIdsFromTracks = function (tracks = [], options = {}) {
   })
 }
 
+const getArtistIdsFromTracks = function(tracks) {
+  return new Promise((resolve, revoke) => {
+    const artistsIds = []
+    eachTrack(tracks, (track) => {
+      if (track && track.artists) {
+        track.artists.forEach(artist => {
+          artist && artist.id && artistsIds.push(artist.id);
+        })
+      }
+    })
+    resolve (artistsIds);
+  })
+}
+
 module.exports = {
   getTracks,
   requestTracks,
   eachTrack,
-  getAllAlbumsIdsFromTracks
+  getAllAlbumsIdsFromTracks,
+  getArtistIdsFromTracks
 }
