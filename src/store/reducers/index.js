@@ -1,8 +1,8 @@
-const {combineReducers} = require ('redux');
-const playlists = require ('./playlists');
+import {combineReducers} from 'redux';
+import playlists from './playlists';
+import smartPlaylists from './smartPlaylists'
 
-const reducers = combineReducers({
-  playlists
+export default combineReducers({
+  playlists,
+  smartPlaylists
 })
-
-module.exports = reducers;

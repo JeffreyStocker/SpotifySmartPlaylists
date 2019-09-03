@@ -1,8 +1,5 @@
-
-
-const reducer = function (state = {}, action) {
+const reducer = function (state = {list: []}, action) {
   return state;
 }
 
-
-module.exports = reduce;
+export default reducer;
