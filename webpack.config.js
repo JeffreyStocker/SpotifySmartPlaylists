@@ -25,5 +25,8 @@ module.exports = {
     // new webpack.DefinePlugin({
     //   'clientID': JSON.stringify(process.env.CLIENT_ID)
     // })
-  ]
+  ],
+  watchOptions: {
+    ignored: [/node_modules/, 'src']
+  }
 };

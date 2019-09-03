@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev2": "npx concurrently  \"nodemon ./server/server.js\"",
-    "dev": "npx concurrently  \"webpack --watch\" \"nodemon --inspect ./server/server.js\"",
+    "dev": "npx concurrently  \"webpack --watch\" \"nodemon --watch .src/ --inspect ./server/server.js\"",
     "start": "node ./server/server.js",
     "test": "jest"
   },
