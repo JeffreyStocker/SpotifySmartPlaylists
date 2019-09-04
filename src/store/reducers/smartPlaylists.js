@@ -2,10 +2,10 @@ import {ADD_PLAYLIST, REMOVE_PLAYLIST, UPDATE_PLAYLIST} from '../actions/smartPl
 
 const reducer = function (state = [], action) {
   const {type, payload} = action;
-  const newState;
+  let newState;
+
   switch(type) {
     case ADD_PLAYLIST:
-      let newState
       if (payload.index === null) {
         newState = [...state, payload];
       } else (
