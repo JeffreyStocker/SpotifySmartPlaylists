@@ -4,13 +4,13 @@ import {connect} from 'react-redux';
 import {addPlaylist, removePlaylist, updatePlaylist} from '../store/actions/smartPlaylists';
 
 import {Grid, Card} from 'semantic-ui-react';
-import PlaylistItem from './Playlist_Item.jsx';
+import PlaylistItem from './ListSmartPlaylist_Item.jsx';
 
 function ListSmartPlaylist (props) {
+  const {smartPlaylists} = props.smartPlaylists;
   return (
     <div>
       <Grid container columns={1}>
-
         <Grid.Row>
           <Card fluid>
             <Card.Content>
@@ -25,13 +25,12 @@ function ListSmartPlaylist (props) {
   )
 }
 
-const mapStateToProps = function mapStateToProps (state) {
+const mapStateToProps = function mapStateToProps ({smartPlaylists}) {
   return {smartPlaylists}
 }
 
 const mapActionsToProps = function mapActionsToProps () {
   return {addPlaylist, removePlaylist, updatePlaylist};
 }
-
 
 export default connect(mapStateToProps, mapActionsToProps)(ListSmartPlaylist);

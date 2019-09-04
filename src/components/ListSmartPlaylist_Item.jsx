@@ -1,8 +1,8 @@
 import React from 'react';
 import {Container, Grid, Button, Icon, Input, Item} from 'semantic-ui-react';
 
-import SelectModifier from './ListPlaylists_SelectModifier.jsx';
-import Options from './ListPlaylists_Options.jsx';
+import SelectModifier from './ListSmartPlaylists_SelectModifier.jsx';
+import Options from './ListSmartPlaylists_Options.jsx';
 
 
 export default class Playlist_Item extends React.Component {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Menu from './components/Menu.jsx';
-import Playlists from './components/ListSmartPlaylists';
+import SmartPlaylists from './components/ListSmartPlaylists.jsx';
 import {Container} from 'semantic-ui-react';
 
 
@@ -15,7 +15,7 @@ export default class App extends React.Component {
     return (
       <Container>
         <Menu></Menu>
-        <Playlists></Playlists>
+        <SmartPlaylists></SmartPlaylists>
       </Container>
     );
   }
