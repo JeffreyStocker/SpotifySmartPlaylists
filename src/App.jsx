@@ -1,5 +1,9 @@
 import React from 'react';
 import Menu from './components/Menu.jsx';
+import Playlists from './components/ListSmartPlaylists';
+import {Container} from 'semantic-ui-react';
+
+
 
 export default class App extends React.Component {
   constructor (props) {
@@ -9,9 +13,10 @@ export default class App extends React.Component {
 
   render () {
     return (
-      <div>
+      <Container>
         <Menu></Menu>
-      </div>
+        <Playlists></Playlists>
+      </Container>
     );
   }
 }
