@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Checkbox, Transition, Input, Label} from 'semantic-ui-react';
+import {Container, Checkbox, Transition, Input} from 'semantic-ui-react';
 
 const PlaylistOptions = function PlaylistOptions (props) {
   const {
