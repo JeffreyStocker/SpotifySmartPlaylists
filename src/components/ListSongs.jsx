@@ -1,12 +1,21 @@
 import React from 'react';
 import {Table} from 'semantic-ui-react';
 
+const handleTrueAndFalse = function (val) {
+  if (val === true) {
+    return 'Yes'
+  } else if (val === false) {
+    return 'No'
+  }
+  throw new Error ('val must be false');
+}
+
 export default class ListSongs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       columns: [
-        ['Name', true, 'name', "Dawn of Victory"],
+        ['Name', true, 'name', ], //"Dawn of Victory"
         ['Album', true,  'album', (album) => album.name],
         ['Artists', true,  'artists',
           (artists) => {
@@ -15,18 +24,18 @@ export default class ListSongs extends React.Component {
               return acc;
           }, []).join(' ')}
         ],
-        ['Track Number', true,  'track_number', 2],
-        ['Disk Number', true,  'disc_number', 1],
-        ['Duration', true,  'duration_ms', 287026],
-        ['Popularity', true,  'popularity', 50],
-        ['Explicit', true,  'explicit', false],
-        ['HREF', false, 'href',	["https://api.spotify.com/…s/2Wy6uQOX2y45ooKuQb7Q9B"]],
-        ['ID', false, 'id',	"2Wy6uQOX2y45ooKuQb7Q9B"],
-        ['Preview URL', false, 'preview_url',	"https://p.scdn.co/mp3-pr…b4ae407c9a7d3111b6e6c16f"],
+        ['Track Number', true,  'track_number'], //2
+        ['Disk Number', true,  'disc_number'], //1
+        ['Duration', true,  'duration_ms'], //287026 ms
+        ['Popularity', true,  'popularity'], //50
+        ['Explicit', true,  'explicit', handleTrueAndFalse], // true/false
+        ['HREF', false, 'href',	], //["https://api.spotify.com/…s/2Wy6uQOX2y45ooKuQb7Q9B"]
+        ['ID', false, 'id',], //"2Wy6uQOX2y45ooKuQb7Q9B"
+        ['Preview URL', false, 'preview_url',	], //"https://p.scdn.co/mp3-pr…b4ae407c9a7d3111b6e6c16f"
         ['Available Markets', false, 'available_markets',	() => {}],
         ['External Ids', false, 'external_ids',	() => {}],
         ['External URLS', false, 'external_urls',	() => {}],
-        ['Is Local', false, 'is_local',	false],
+        ['Is Local', false, 'is_local',	handleTrueAndFalse], //false
         ['Type', false, 'type',	"track"],
         ['URI', false, 'uri',	"spotify:track:2Wy6uQOX2y45ooKuQb7Q9B"],
       ]
