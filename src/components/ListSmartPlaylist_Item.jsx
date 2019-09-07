@@ -7,8 +7,9 @@ import SelectModifier from './ListSmartPlaylists_SelectModifier.jsx';
 import Options from './ListSmartPlaylists_Options.jsx';
 import UpAndDownArrow from './UpAndDownArrow.jsx'
 import AddAndSubract from './Button_AddAndSubtract.jsx';
+import ListSongs from './ListSongs.jsx'
 
-
+import {likedTracks} from '../../ref/likedTracks.json';
 
 
 class Playlist_Item extends React.Component {
@@ -16,7 +17,8 @@ class Playlist_Item extends React.Component {
     super(props);
     this.state = {
       displayOptions: false,
-      isVisibleRules: true
+      isVisibleRules: true,
+      subpanelIndex: null
     };
     this.handleOptionChange = this.handleOptionChange.bind(this);
     this.handleIsVisibleRuleChange = this.handleIsVisibleRuleChange.bind(this);
@@ -28,8 +30,8 @@ class Playlist_Item extends React.Component {
     // this.handleUpdatePlaylist = this.handleUpdatePlaylist.bind(this);
   }
 
-  handleOptionChange() {
-    this.setState({displayOptions: !this.state.displayOptions})
+  handleOptionChange(index) {
+    this.setState({subpanelIndex: this.state.subpanelIndex === index ? null : index})
   }
 
   handleIsVisibleRuleChange() {
@@ -57,10 +59,11 @@ class Playlist_Item extends React.Component {
   render () {
 
     const {
-      state: { isVisibleRules, displayOptions },
+      state: { isVisibleRules, displayOptions, subpanelIndex },
       props: { playlist, index, addPlaylist },
       handleAddRule,
-      handleCardClick
+      handleCardClick,
+
     } = this;
 
     // const {
@@ -104,13 +107,29 @@ class Playlist_Item extends React.Component {
 
           <Grid.Row>
             <Grid.Column width={4}>
-              <Accordion onClick={this.handleOptionChange}>
-                <Accordion.Content>
+              <Accordion>
+                <Accordion.Title
+                  active={subpanelIndex === 0}
+                  onClick={(evt, props) => this.handleOptionChange(0)}
+                  >
                   <UpAndDownArrow isUp={displayOptions}/> Options
+                </Accordion.Title>
+                <Accordion.Content active={subpanelIndex === 0}>
+                  <Options></Options>
+                </Accordion.Content>
+
+                <Accordion.Title
+                  active={subpanelIndex === 1}
+                  onClick={(evt, props) => this.handleOptionChange(1)}
+                  >
+                  <UpAndDownArrow isUp={displayOptions}/>
+                  Songs
+                </Accordion.Title>
+                <Accordion.Content active={subpanelIndex === 1}>
+                  <ListSongs tracks={likedTracks} />
                 </Accordion.Content>
               </Accordion>
             </Grid.Column>
-            <Options isOpen={this.state.displayOptions}></Options>
           </Grid.Row>
         </Grid>
       </Transition>
@@ -119,6 +138,7 @@ class Playlist_Item extends React.Component {
 }
 
 /*
+isOpen={this.state.displayOptions}
 <Card fluid>
         <Card.Content>
           <Card.Header onClick={this.handleIsVisibleRuleChange}><div onClick={this.handleIsVisibleRuleChange}>{playlist.name}<UpAndDownArrow isUp={isVisibleRules}/></div></Card.Header>
