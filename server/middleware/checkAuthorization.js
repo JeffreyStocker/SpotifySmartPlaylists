@@ -11,11 +11,12 @@ const checkAuth = async function (ctx, next) {
 
     ctx.user = user;
   }
-  ctx.auth = user ? true : false;
+  ctx.auth = ((user && user.id) === ctx.session.id) ? true : false;
   await next();
 }
 
 module.exports = {
   checkAuth
 }
+
 
