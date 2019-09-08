@@ -29,15 +29,48 @@ const usersSchema = mongoose.Schema({
 
 /**
  * @description Determines if the access token is expired
+ * @this {Users} A user Schema for a found user
  * @returns Boolean
  */
-usersSchema.method('isExpired', function (...args) {
+usersSchema.method('isExpired', function () {
   const {refreshTokenExpires, updatedAccessToken} = this;
-  if ((Date.now() - updatedAccessToken) * 1000 > (refreshTokenExpires - 10000)) {
+  const dateDiff = Date.now() - updatedAccessToken;
+  const expirationTimeInMS = refreshTokenExpires * 1000
+  const marginOfError = 10000
+  if ( dateDiff > (expirationTimeInMS - marginOfError)) {
     return true;
   } else {
     return false;
   }
+})
+
+/**
+ *
+ * @this {Users} A user Schema for a found user
+ * @return {null||String} null if error, access token upon retrival from spotify
+ */
+usersSchema.method('updateToken', async function () {
+  const response = await getRefreshToken(this.refreshToken);
+  if (response && response.access_token) {
+    this.accessToken = response.access_token;
+    this.refreshTokenExpires = response.expires_in;
+    this.updatedAccessToken = Date.now();
+    await this.save();
+    return this.accessToken;
+  }
+  return null;
+})
+
+/**
+ * @this {Users} A user model of a found user
+ * @returns {null|String} A Access Token for Spotify or failure will return null
+ */
+usersSchema.method('checkAccessTokenIsExpiredAndUpdate', async function () {
+  let accessToken;
+  const isExpired = this.isExpired();
+  accessToken = (isExpired) ? await this.updateToken() : this.accessToken;
+
+  return accessToken;
 })
 
 /**
@@ -97,7 +130,7 @@ const createOrUpdateUser = function createOrUpdateUser (dataToSave) {
  * @description will get a new token from spotify and then save the token and access token to the user database
  * @returns {String} new access token
  */
-const getAndUpdateRefreshToken = async function (accessToken) {
+const getAndUpdateRefreshTokenByToken = async function (accessToken) {
   const query = {accessToken: accessToken};
   const doc = await Users.findOne(query).exec();
   const {access_token, expires_in} = await getRefreshToken(doc.refreshToken);
@@ -116,6 +149,8 @@ const getAndUpdateRefreshToken = async function (accessToken) {
   return access_token;
 }
 
+
+
 const Users = mongoose.model('users', usersSchema);
 
 module.exports = {
@@ -123,7 +158,7 @@ module.exports = {
   createOrUpdateUser,
   createUser,
   getUser,
-  getAndUpdateRefreshToken,
+  getAndUpdateRefreshTokenByToken,
 };
 
 //example profile return data
