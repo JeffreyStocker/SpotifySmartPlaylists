@@ -1,6 +1,6 @@
 const axios = require ('axios');
 const genAuthHeader = require('./authorize').generateAccessAuthorizationStr;
-const {getAndUpdateRefreshToken} = require ('../database/users');
+const {getAndUpdateRefreshTokenByToken} = require ('../database/users');
 const {REQUEST_LIMIT} = require ('../constants');
 
 const generateRequestOptions = function generateRequestOptions (accessToken, options = {}) {
@@ -46,7 +46,7 @@ const getFromSpotify = function getFromSpotify (url, accessToken, options = {}) 
         case 401:
             if (firstRun) {
               firstRun = false;
-              return getAndUpdateRefreshToken(accessToken)
+              return getAndUpdateRefreshTokenByToken(accessToken)
                 .then(newToken => {
                   const newRequestOptions = generateRequestOptions(newToken, options);
                   return request(url, newRequestOptions)
