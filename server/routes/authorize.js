@@ -10,7 +10,7 @@ router.post('/authorize', async function (ctx, next) {
   const tokenData = await getToken(code);
   const {access_token, refresh_token, expires_in} = tokenData;
 
-  const [userData, playlists] = await Promise.all ([await getUserData(access_token), await getPlaylists(access_token)])
+  const userData= await getUserData(access_token)
 
   const results = await createOrUpdateUser({
     id: userData.id,
@@ -21,9 +21,14 @@ router.post('/authorize', async function (ctx, next) {
   })
 
   ctx.body = {
-    userData,
-    playlists
+    id: userData.id,
+    name: userData.display_name
   };
+
+  ctx.session = {
+    id: userData.id,
+    name: userData.display_name
+  }
 
   return ctx;
 })
