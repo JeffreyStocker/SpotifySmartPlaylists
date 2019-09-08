@@ -7,7 +7,7 @@ import SelectModifier from './ListSmartPlaylists_SelectModifier.jsx';
 import Options from './ListSmartPlaylists_Options.jsx';
 import UpAndDownArrow from './UpAndDownArrow.jsx'
 import AddAndSubract from './Button_AddAndSubtract.jsx';
-import ListSongs from './ListSongs.jsx'
+import ListSongs from './ListSongs.jsx';
 
 import {likedTracks} from '../../ref/likedTracks.json';
 
@@ -21,7 +21,6 @@ class Playlist_Item extends React.Component {
       subpanelIndex: null
     };
     this.handleOptionChange = this.handleOptionChange.bind(this);
-    this.handleIsVisibleRuleChange = this.handleIsVisibleRuleChange.bind(this);
     this.handleAddRule = this.handleAddRule.bind(this);
     this.handleRemoveRule = this.handleRemoveRule.bind(this);
 
@@ -92,7 +91,6 @@ class Playlist_Item extends React.Component {
 
           {playlist.rules.map(rule => (
             <Grid.Row key={Math.random()}>
-              {/* <Grid.Column width={1} verticalAlign="middle"><Icon size="large" name="minus circle"/></Grid.Column> */}
               <Grid.Column width={2} verticalAlign="middle">
                 <AddAndSubract
                   increase={(evt) => this.handleAddRule(evt, index)}
@@ -126,7 +124,7 @@ class Playlist_Item extends React.Component {
                   Songs
                 </Accordion.Title>
                 <Accordion.Content active={subpanelIndex === 1}>
-                  <ListSongs tracks={likedTracks} />
+                  {subpanelIndex === 1 && <ListSongs tracks={likedTracks} />}
                 </Accordion.Content>
               </Accordion>
             </Grid.Column>
