@@ -29,10 +29,7 @@ const mongoose = require ('mongoose');
 // })
 
 const playlists = mongoose.Schema({
-  id: {
-    type: String,
-    required: true
-  },
+  id: String,
   rules: {
     type: [{
       source: String,
@@ -86,9 +83,18 @@ const playlists = mongoose.Schema({
 
 const Playlists = mongoose.model('Playlists', playlists);
 
+const getPlaylistByID = function getPlaylist (playlistID) {
+  return Playlists.findOne({id: playlistId}).exec();
+}
+
+const updatePlaylist = function updatePlaylist (playlistId, updatedPlaylist) {
+  return Playlists.findOneAndUpdate({id: playlistId}, updatedPlaylist).exec();
+}
 
 
 module.exports = {
   model: Playlists,
-  schema: playlists
+  schema: playlists,
+  getPlaylistByID,
+  updatePlaylist
 }
