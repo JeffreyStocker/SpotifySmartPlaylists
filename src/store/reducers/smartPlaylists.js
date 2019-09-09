@@ -3,7 +3,8 @@ import {
   REMOVE_PLAYLIST,
   UPDATE_PLAYLIST,
   ADD_RULE_PLAYLIST,
-  REMOVE_RULE_PLAYLIST
+  REMOVE_RULE_PLAYLIST,
+  SET_ALL_PLAYLISTS,
 } from '../actions/smartPlaylists'
 
 const defaultPlaylist = function () {
@@ -79,6 +80,9 @@ const reducer = function (state = [defaultPlaylist()], action) {
       })
       break;
 
+    case SET_ALL_PLAYLISTS:
+      newState = payload;
+      break;
   }
   return newState ? newState : state;
 }
