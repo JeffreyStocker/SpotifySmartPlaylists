@@ -25,7 +25,7 @@ const database = require ('./database/database');
 const authorize = require('./routes/authorize');
 const test = require ('./routes/routeTest');
 const users = require ('./routes/user.js');
-const playlist = require ('./routes/playlist.js');
+// const playlist = require ('./routes/playlist.js');
 
 const app = new koa();
 const port = Number(process.env.PORT) || 8080;
@@ -45,7 +45,7 @@ app.use(static(__dirname + '/../dist'))
 
 app.use(authorize.routes(), authorize.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
-app.use(playlist.routes(), playlist.allowedMethods());
+// app.use(playlist.routes(), playlist.allowedMethods());
 app.use(test.routes(), test.allowedMethods());
 
 app.listen(port, () => console.log(`App listening on port ${port}!`))
