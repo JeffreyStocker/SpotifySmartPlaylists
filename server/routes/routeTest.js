@@ -1,4 +1,4 @@
-const koaRouter = require ('koa-router');
+const koaRouter = require ('@koa/router');
 const tracks = require ('../spotify/tracks');
 const dbUser = require ('../database/users');
 const userData = require ('../spotify/userData');
@@ -17,7 +17,7 @@ route.get('/test', async (ctx) => {
   let {accessToken} = userData;
 
   if (userData.isExpired()) {
-    accessToken = await dbUser.getAndUpdateRefreshToken(accessToken)
+    accessToken = await dbUser.getAndUpdateRefreshTokenByToken(accessToken)
   }
   const [likedTracks, likedAlbums] = await Promise.all([getLikedSongs(accessToken), getLikedAlbums(accessToken)]);
 

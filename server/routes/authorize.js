@@ -1,4 +1,4 @@
-const Router = require ('koa-router')
+const Router = require ('@koa/router')
 const router = Router();
 const {getToken} = require ('../spotify/authorize');
 const {getUserData} = require ('./../spotify/userData');
