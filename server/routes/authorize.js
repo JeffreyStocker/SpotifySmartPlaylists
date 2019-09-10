@@ -12,7 +12,7 @@ router.post('/authorize', async function (ctx, next) {
 
   const userData= await getUserData(access_token)
 
-  const results = await createOrUpdateUser({
+  const dbData = await createOrUpdateUser({
     id: userData.id,
     name: userData.display_name,
     accessToken: access_token,
@@ -20,9 +20,12 @@ router.post('/authorize', async function (ctx, next) {
     refreshTokenExpires: expires_in,
   })
 
+  await dbData.populate('smartPlaylists')
+
   ctx.body = {
     id: userData.id,
-    name: userData.display_name
+    name: userData.display_name,
+    smartPlaylists: dbData.smartPlaylists
   };
 
   ctx.session = {
