@@ -3,7 +3,10 @@
     const params = location.search;
     const code = params.match(/code=(\S+)(?:&|$)/);
     const state = params.match(/state=(\S+)(?:&|$)/);
-    window.localStorage.setItem('code', code[1])
+    const token = params.match(/token=(\S+)(?:&|$)/);
+    token && window.localStorage.setItem('token', token[1])
+    code && window.localStorage.setItem('code', code[1])
+    state && window.localStorage.setItem('state', state[1])
     window.close();
   </script>
 </html>
