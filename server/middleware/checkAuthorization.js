@@ -11,7 +11,7 @@ const checkAuth = async function (ctx, next) {
 
     ctx.user = user;
   }
-  ctx.auth = ((user && user.id) === ctx.session.id) ? true : false;
+  ctx.auth = (((user && user.id) === ctx.session.id) && user) ? true : false;
   await next();
 }
 
