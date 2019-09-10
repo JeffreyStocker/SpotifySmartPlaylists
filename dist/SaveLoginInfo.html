@@ -1,12 +1,12 @@
 <html>
   <script type="text/javascript">
     const params = location.search;
-    const code = params.match(/code=(\S+)(?:&|$)/);
-    const state = params.match(/state=(\S+)(?:&|$)/);
-    const token = params.match(/token=(\S+)(?:&|$)/);
-    token && window.localStorage.setItem('token', token[1])
-    code && window.localStorage.setItem('code', code[1])
-    state && window.localStorage.setItem('state', state[1])
+    const findAndSave = function (name) {
+      const regexp = new RegExp(`${name}=(\\S+)(?:&|$)`)
+      const searched = params.match(regexp);
+      searched && window.localStorage.setItem(name, searched[1]);
+    }
+    const set = ['code', 'expires_in', 'token_type', 'state', 'access_token'].forEach((val) => findAndSave(val));
     window.close();
   </script>
 </html>
