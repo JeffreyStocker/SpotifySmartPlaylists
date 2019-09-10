@@ -1,6 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
+import {connect} from 'react-redux';
+import {setUser} from '../store/actions/user';
+import {setAllPlaylists} from '../store/actions/smartPlaylists';
 
 const link_backup = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${process.env.SPOTIFY_REDIRECT}`;
 const linkOptions = {
@@ -16,7 +19,7 @@ const linkOptions = {
 }
 const link = `https://accounts.spotify.com/authorize?${qs.stringify(linkOptions)}`
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,6 +39,9 @@ export default class Login extends React.Component {
       .then(response => {
         this.setState({code: code});
         if (response.status === 200) {
+          const {id, name = 'Unnamed', smartPlaylists} = response.data;
+          this.props.setUser({id, name});
+          this.props.setAllPlaylists(smartPlaylists);
           console.log ('response', response.status, response.data)
           }
         })
@@ -56,3 +62,10 @@ export default class Login extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = {
+  setUser,
+  setAllPlaylists
+}
+
+export default connect(null, mapDispatchToProps)(Login)
