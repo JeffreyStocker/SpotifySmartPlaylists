@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 
 import {addPlaylist, removePlaylist, updatePlaylist} from '../store/actions/smartPlaylists';
 
-import {Grid, Card, Accordion, Container, Icon, Segment} from 'semantic-ui-react';
+import {Accordion, Icon, Segment, Message} from 'semantic-ui-react';
 import PlaylistItem from './ListSmartPlaylist_Item.jsx';
+import Editable from './TitleEditable.jsx'
 
 const handleUpdatePlaylist = function (updatePlaylist, playlist, index) {
   updatePlaylist(playlist, index);
@@ -34,6 +35,10 @@ class ListSmartPlaylist extends React.Component{
 
   }
 
+  handlePlaylistUpdate() {
+
+  }
+
   render() {
     const {smartPlaylists} = this.props;
     const {state: {activeIndex}} = this;
@@ -53,23 +58,29 @@ class ListSmartPlaylist extends React.Component{
       //   ))}
       // </Grid>
       <Accordion fluid>
-        {
-          smartPlaylists.map((playlist, index) => (
-          <Segment key={playlist.spotifyID}>
-            <Accordion.Title onClick={() => this.handleAccordianClick(index)} active={activeIndex === index}>
-              <Icon name='dropdown' />{playlist.name}
-            </Accordion.Title>
-            <Accordion.Content active={activeIndex === index}>
-              <PlaylistItem
-                index={index}
-                playlist={playlist}
-                addPlaylist={() => handleAddPlaylist(props.addPlaylist, index)}
-                removePlaylist={() => handleRemovePlaylist(props.removePlaylist, index)}
-                updatePlaylist={() => handleUpdatePlaylist(props.updatePlaylist, playlist, index)}
-              />
-            </Accordion.Content>
-          </Segment>
-          ))
+        { smartPlaylists.length > 0
+          ?
+            smartPlaylists.map((playlist, index) => (
+            <Segment key={playlist.spotifyID}>
+              <Accordion.Title onClick={() => this.handleAccordianClick(index)} active={activeIndex === index}>
+                <Icon name='dropdown' /><Editable text={playlist.name}/>
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex === index}>
+                <PlaylistItem
+                  index={index}
+                  playlist={playlist}
+                  addPlaylist={() => handleAddPlaylist(props.addPlaylist, index)}
+                  removePlaylist={() => handleRemovePlaylist(props.removePlaylist, index)}
+                  updatePlaylist={() => handleUpdatePlaylist(props.updatePlaylist, playlist, index)}
+                />
+              </Accordion.Content>
+            </Segment>
+            ))
+          :
+            <Message>
+              <Message.Header>Smart Playlists</Message.Header>
+              <Message.Content>No Smart Playlists</Message.Content>
+            </Message>
         }
       </Accordion>
     )
