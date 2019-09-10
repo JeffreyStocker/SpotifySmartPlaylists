@@ -32,7 +32,6 @@ const request = function (url, options = {}) {
 }
 
 const getFromSpotify = function getFromSpotify (url, accessToken, options = {}) {
-  let firstRun = true;
   const requestOptions = generateRequestOptions(accessToken, options);
   return request(url, requestOptions)
   .then(res => {
@@ -41,35 +40,19 @@ const getFromSpotify = function getFromSpotify (url, accessToken, options = {}) 
   .catch(err => {
     if (err.code === "ECONNREFUSED"){
       console.log ('err.refused', console.error (err))
-    } else if (err && err.response && err.response.status) {
-      switch (err.response.status) {
-        case 401:
-            if (firstRun) {
-              firstRun = false;
-              return getAndUpdateRefreshTokenByToken(accessToken)
-                .then(newToken => {
-                  const newRequestOptions = generateRequestOptions(newToken, options);
-                  return request(url, newRequestOptions)
-                })
-            }
-          break;
-        case 429:
-          //wip
-          const timeout = err.Retry-After
-          return new Promise ((resolve, revoke) => {
-            setTimeout(() => {
-              request (url, accessToken, options)
-              .then(resolve)
-                .catch(revoke)
-              }, timeout)
-          })
-          break;
-        default:
-          break;
-        }
-        return null;
-      }
-    })
+    } else if (err.reponse.status === 429) {
+      const timeout = err.Retry-After
+      return new Promise ((resolve, revoke) => {
+        setTimeout(() => {
+          request (url, accessToken, options)
+          .then(resolve)
+            .catch(revoke)
+          }, timeout)
+      })
+    } else {
+      throw new Error (err);
+    }
+  })
 }
 
 const getFromSpotifyWithLimits = async function getFromSpotifyWithLimits(url, accessToken, options = {}) {
