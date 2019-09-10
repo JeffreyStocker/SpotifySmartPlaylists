@@ -58,4 +58,7 @@ module.exports = {
     //other
     REQUEST_LIMIT: 50,
 
+    MAX_ITEMS_PER_PLAYLIST: 10000,
+    MIN_ITEMS_PER_PLAYLIST: 0,
+
 }
