@@ -104,7 +104,7 @@ class Playlist_Item extends React.Component {
           ))}
 
           <Grid.Row>
-            <Grid.Column width={4}>
+            <Grid.Column width={16}>
               <Accordion>
                 <Accordion.Title
                   active={subpanelIndex === 0}
@@ -113,7 +113,7 @@ class Playlist_Item extends React.Component {
                   <UpAndDownArrow isUp={displayOptions}/> Options
                 </Accordion.Title>
                 <Accordion.Content active={subpanelIndex === 0}>
-                  <Options></Options>
+                  <Options options={playlist.options}></Options>
                 </Accordion.Content>
 
                 <Accordion.Title
