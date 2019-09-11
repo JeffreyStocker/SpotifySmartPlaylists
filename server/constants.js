@@ -1,5 +1,9 @@
 module.exports = {
   //spotify api
+    //authorization
+    CLIENT_CREDINTIAL_URL: 'https://accounts.spotify.com/api/token',
+    AUTHORIZTION_CODE_URL: 'https://accounts.spotify.com/authorize',
+    IMPLICIT_GRANT_ACCESS_URL: 'https://api.spotify.com/v1/me',
     //library
     SAVED_TRACKS_URL: 'https://api.spotify.com/v1/me/tracks',
     SAVED_ALBUMS_URL: "https://api.spotify.com/v1/me/albums",
