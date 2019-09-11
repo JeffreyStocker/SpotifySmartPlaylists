@@ -12,10 +12,11 @@ export function setAllPlaylists (smartPlaylists) {
   }
 }
 
-export function addPlaylist (index = null) {
+export function addPlaylist (playlistData, index = null) {
   return {
     type: ADD_PLAYLIST,
     payload: {
+      playlistData,
       index
     }
   }

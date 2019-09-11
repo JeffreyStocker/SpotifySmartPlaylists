@@ -28,7 +28,7 @@ const defaultPlaylist = function () {
   }
 }
 
-const reducer = function (state = [defaultPlaylist()], action) {
+const reducer = function (state = [], action) {
   const {type, payload} = action;
   let newState;
   let playlist, index, origPlaylist;
@@ -36,9 +36,10 @@ const reducer = function (state = [defaultPlaylist()], action) {
   switch(type) {
     case ADD_PLAYLIST:
       if (payload.index === null) {
-        newState = [...state, defaultPlaylist()];
+        let playlist = payload.playlistData ? payload.playlistData : defaultPlaylist();
+        newState = [...state, playlist];
       } else (
-        newState = [...state.slice(0, payload.index),  defaultPlaylist(), ...state.slice(payload.index)]
+        newState = [...state.slice(0, payload.index),  playlist, ...state.slice(payload.index)]
       )
 
       break;
