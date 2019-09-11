@@ -1,4 +1,6 @@
 const axios = require ('axios');
+const {generateBasicAuthorizationStr, generateAccessAuthorizationStr} = require ('./authorizeUtilties');
+
 const clientID = process.env.CLIENT_ID;
 const clientSECRET = process.env.CLIENT_SECRET;
 const redirect_url = process.env.SPOTIFY_REDIRECT;
@@ -6,10 +8,6 @@ var qs = require('qs');
 
 if (!clientID || !clientSECRET) {
   throw new Error ('Must include a CLIENT_ID and CLIENT_SECRET in .env file')
-}
-
-const generateBasicAuthorizationStr = function generateBasicAuthorizationStr (clientID, clientSECRET) {
-  return "Basic " + new Buffer(clientID+":"+clientSECRET).toString('base64')
 }
 
 const clientCredentialsFlow = function clientCredentialsFlow (code) {
@@ -34,8 +32,6 @@ const clientCredentialsFlow = function clientCredentialsFlow (code) {
 
 const getToken = function authorization_code (code) {
   return axios.post('https://accounts.spotify.com/api/token',
-    // "grant_type=client_credentials" ,
-    // "grant_type=authorization_code",
     qs.stringify({
       grant_type: "authorization_code",
       code,
@@ -73,10 +69,6 @@ const getRefreshToken = function getRefreshToken (refreshToken) {
     .catch (err => {
       console.error(err)
     })
-}
-
-const generateAccessAuthorizationStr = function generateAccessAuthorizationStr (accessToken) {
-  return `Bearer ${accessToken}`;
 }
 
 module.exports = {
