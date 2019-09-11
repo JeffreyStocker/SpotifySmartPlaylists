@@ -84,7 +84,7 @@ const playlists = mongoose.Schema({
 const Playlists = mongoose.model('Playlists', playlists);
 
 const getPlaylistByID = function getPlaylist (playlistID) {
-  return Playlists.findOne({id: playlistId}).exec();
+  return Playlists.findOne({id: playlistID}).exec();
 }
 
 const updatePlaylist = function updatePlaylist (playlistId, updatedPlaylist) {
