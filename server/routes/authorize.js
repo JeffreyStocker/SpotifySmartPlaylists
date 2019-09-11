@@ -30,7 +30,8 @@ router.post('/authorize', async function (ctx, next) {
 
   ctx.session = {
     id: userData.id,
-    name: userData.display_name
+    name: userData.display_name,
+    accessToken: access_token
   }
 
   return ctx;
