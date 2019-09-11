@@ -58,7 +58,7 @@ const playlists = mongoose.Schema({
         default: true,
         type: Boolean
       },
-      likedSongs: {
+      likedTracks: {
         default: true,
         type: Boolean
       },
