@@ -2,7 +2,7 @@ import React from 'react';
 import Menu from './components/Menu.jsx';
 import SmartPlaylists from './components/ListSmartPlaylists.jsx';
 import {Container} from 'semantic-ui-react';
-import cookie from 'js-cookie';
+import cookie from'js-cookie';
 import axios from 'axios';
 
 import {connect} from 'react-redux';
