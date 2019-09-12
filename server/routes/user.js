@@ -49,6 +49,17 @@ route.get("/smartplaylist/:playlist", async ctx => {
   ctx.body = doc
 })
 
+route.delete("/smartplaylist/:playlist", async ctx => {
+  try {
+    const {playlist} = ctx.params;
+    const doc = ctx.user.smartPlaylists.id(playlist).remove();
+    await doc.save();
+    ctx.status === 200;
+  } catch (err) {
+    ctx.status === 400;
+  }
+})
+
 route.put("/smartplaylist/:playlist", async ctx => {
   const {playlist} = ctx.params;
   const doc = ctx.user.smartPlaylists.id(playlist);

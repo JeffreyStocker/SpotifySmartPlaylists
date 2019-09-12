@@ -1,13 +1,15 @@
 import React from 'react';
-import {Container, Grid, Card, Icon, Transition, Accordion, Button} from 'semantic-ui-react';
+import {Grid, Transition, Accordion, Button} from 'semantic-ui-react';
 import {connect} from 'react-redux';
-import {addRulePlaylist, removeRulePlaylist} from '../store/actions/smartPlaylists'
+import {addRulePlaylist, removeRulePlaylist, removePlaylist} from '../store/actions/smartPlaylists'
 
 import SelectModifier from './ListSmartPlaylists_SelectModifier.jsx';
 import Options from './ListSmartPlaylists_Options.jsx';
 import UpAndDownArrow from './UpAndDownArrow.jsx'
 import AddAndSubract from './Button_AddAndSubtract.jsx';
 import ListSongs from './ListSongs.jsx';
+import PlaylistControls from './ListSmartPlaylistControls.jsx';
+import PropTypes from 'prop-types';
 
 import {likedTracks} from '../../ref/likedTracks.json';
 
@@ -23,10 +25,8 @@ class Playlist_Item extends React.Component {
     this.handleOptionChange = this.handleOptionChange.bind(this);
     this.handleAddRule = this.handleAddRule.bind(this);
     this.handleRemoveRule = this.handleRemoveRule.bind(this);
+    this.deletePlaylist = this.deletePlaylist.bind(this);
 
-    // this.handleAddPlaylist = this.handleAddPlaylist.bind(this);
-    // this.handleRemovePlaylist = this.handleRemovePlaylist.bind(this);
-    // this.handleUpdatePlaylist = this.handleUpdatePlaylist.bind(this);
   }
 
   handleOptionChange(index) {
@@ -45,41 +45,29 @@ class Playlist_Item extends React.Component {
     this.props.removeRulePlaylist(this.props.playlist, index);
   }
 
+  deletePlaylist () {
+    this.props.removePlaylist(this.props.playlist);
+  }
+
 
   handleCardClick(evt) {
-    // evt.persist();
-    // evt.stopPropagation()
-    // evt.preventDefault(),
-    console.log (evt);
     this.handleIsVisibleRuleChange()
-
   }
 
   render () {
 
     const {
       state: { isVisibleRules, displayOptions, subpanelIndex },
-      props: { playlist, index, addPlaylist },
+      props: { playlist },
       handleAddRule,
       handleCardClick,
 
     } = this;
 
-    // const {
-    //   playlist,
-    //   index,
-    //   addPlaylist,
-    // } = this.props;
-
-    // const {
-    //   isVisibleRules,
-    //   displayOptions,
-    //   handleCardClick
-    // } = this.state;
-
     return (
       <Transition>
         <Grid container columns={7}>
+          <Grid.Row><PlaylistControls handleChange={this.deletePlaylist}></PlaylistControls></Grid.Row>
           <Grid.Row>
             <Grid.Column width={2} onClick={(evt) => handleAddRule(evt, -1, playlist)} verticalAlign="middle">
               <Button>Add Rule</Button>
@@ -89,7 +77,7 @@ class Playlist_Item extends React.Component {
             <Grid.Column width={6}>Target</Grid.Column>
           </Grid.Row>
 
-          {playlist.rules.map(rule => (
+          {playlist.rules.map((rule, index) => (
             <Grid.Row key={Math.random()}>
               <Grid.Column width={2} verticalAlign="middle">
                 <AddAndSubract
@@ -135,18 +123,12 @@ class Playlist_Item extends React.Component {
   }
 }
 
-/*
-isOpen={this.state.displayOptions}
-<Card fluid>
-        <Card.Content>
-          <Card.Header onClick={this.handleIsVisibleRuleChange}><div onClick={this.handleIsVisibleRuleChange}>{playlist.name}<UpAndDownArrow isUp={isVisibleRules}/></div></Card.Header>
-
-        </Card.Content>
-      </Card>
-*/
+Playlist_Item.propTypes = {
+  playlist: PropTypes.object.isRequired,
+}
 
 const mapDispatchToProps = {
-  addRulePlaylist, removeRulePlaylist
+  addRulePlaylist, removeRulePlaylist, removePlaylist
 };
 
 export default connect(null, mapDispatchToProps)(Playlist_Item)
