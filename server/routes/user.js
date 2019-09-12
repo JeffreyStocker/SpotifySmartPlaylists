@@ -1,6 +1,4 @@
 const Router = require ('@koa/router');
-const db = require ('../database/users');
-const dbPlaylist = require ('../database/playlists');
 
 const route = Router({
   prefix: '/user/:user'
