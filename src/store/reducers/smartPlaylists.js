@@ -5,6 +5,7 @@ import {
   ADD_RULE_PLAYLIST,
   REMOVE_RULE_PLAYLIST,
   SET_ALL_PLAYLISTS,
+  REMOVE_PLAYLIST_BY_INDEX
 } from '../actions/smartPlaylists'
 
 const defaultPlaylist = function () {
@@ -44,9 +45,19 @@ const reducer = function (state = [], action) {
 
       break;
 
-    case REMOVE_PLAYLIST:
+    case REMOVE_PLAYLIST_BY_INDEX:
       newState = [...state.slice(0, payload.index), ...state.slice(payload.index + 1)]
       break;
+
+    case REMOVE_PLAYLIST:
+      let { playlist } = payload;
+      newState  = state.reduce ((acc, statePlaylist) => {
+        if (statePlaylist !== playlist) {
+          acc.push(statePlaylist);
+        }
+        return acc;
+      }, [])
+      break
 
     case UPDATE_PLAYLIST:
       break;

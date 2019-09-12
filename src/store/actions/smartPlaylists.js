@@ -4,6 +4,7 @@ export const UPDATE_PLAYLIST = 'UPDATE_PLAYLIST';
 export const ADD_RULE_PLAYLIST = 'ADD_RULE_PLAYLIST';
 export const REMOVE_RULE_PLAYLIST = 'REMOVE_RULE_PLAYLIST';
 export const SET_ALL_PLAYLISTS = 'SET_ALL_PLAYLISTS';
+export const REMOVE_PLAYLIST_BY_INDEX = 'REMOVE_PLAYLIST_BY_INDEX';
 
 export function setAllPlaylists (smartPlaylists) {
   return {
@@ -22,11 +23,20 @@ export function addPlaylist (playlistData, index = null) {
   }
 }
 
-export function removePlaylist (index = null) {
+export function removePlaylistByIndex (index = null) {
+  return {
+    type: REMOVE_PLAYLIST_BY_INDEX,
+    payload: {
+      index
+    }
+  }
+}
+
+export function removePlaylist (playlist) {
   return {
     type: REMOVE_PLAYLIST,
     payload: {
-      index
+      playlist
     }
   }
 }
