@@ -21,7 +21,8 @@ route.get('/', async ctx => {
   ctx.body = {
     id: ctx.user.id,
     name: ctx.user.name,
-    smartPlaylists: ctx.user.smartPlaylists
+    smartPlaylists: ctx.user.smartPlaylists,
+    accessToken: ctx.user.accessToken
   }
 })
 
