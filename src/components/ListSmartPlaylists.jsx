@@ -27,12 +27,9 @@ class ListSmartPlaylist extends React.Component{
   }
 
   handleAccordianClick(index) {
-    const { activeIndex } = this.state
-    const newIndex = activeIndex === index ? -1 : index
-
-    console.log ('run', index)
-    this.setState({ activeIndex: newIndex })
-
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+    this.setState({ activeIndex: newIndex });
   }
 
   handlePlaylistUpdate() {
@@ -44,24 +41,11 @@ class ListSmartPlaylist extends React.Component{
     const {state: {activeIndex}} = this;
 
     return (
-      // <Grid container columns={1}>
-      //   {smartPlaylists.map((playlist, index) => (
-      //     <Grid.Row key={playlist.spotifyID}>
-      //       <PlaylistItem
-      //         index={index}
-      //         playlist={playlist}
-      //         addPlaylist={() => handleAddPlaylist(props.addPlaylist, index)}
-      //         removePlaylist={() => handleRemovePlaylist(props.removePlaylist, index)}
-      //         updatePlaylist={() => handleUpdatePlaylist(props.updatePlaylist, playlist, index)}
-      //       />
-      //   </Grid.Row>
-      //   ))}
-      // </Grid>
       <Accordion fluid>
         { smartPlaylists.length > 0
           ?
             smartPlaylists.map((playlist, index) => (
-            <Segment key={playlist.spotifyID}>
+            <Segment key={playlist._id}>
               <Accordion.Title onClick={() => this.handleAccordianClick(index)} active={activeIndex === index}>
                 <Icon name='dropdown' /><Editable text={playlist.name}/>
               </Accordion.Title>
