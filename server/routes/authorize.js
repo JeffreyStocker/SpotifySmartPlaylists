@@ -25,13 +25,13 @@ router.post('/authorize', async function (ctx, next) {
   ctx.body = {
     id: userData.id,
     name: userData.display_name,
-    smartPlaylists: dbData.smartPlaylists
+    smartPlaylists: dbData.smartPlaylists,
+    accessToken: access_token
   };
 
   ctx.session = {
     id: userData.id,
     name: userData.display_name,
-    accessToken: access_token
   }
 
   return ctx;
