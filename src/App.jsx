@@ -1,9 +1,10 @@
 import React from 'react';
 import Menu from './components/Menu.jsx';
 import SmartPlaylists from './components/ListSmartPlaylists.jsx';
-import {Container} from 'semantic-ui-react';
+import {Container, Loader} from 'semantic-ui-react';
 import cookie from'js-cookie';
 import axios from 'axios';
+import ShowSync from './components/ShowSync.jsx';
 
 import {connect} from 'react-redux';
 import {setUser} from './store/actions/user';
@@ -30,10 +31,25 @@ class App extends React.Component {
     return (
       <Container>
         <Menu></Menu>
-        <SmartPlaylists></SmartPlaylists>
+        {this.props.user &&
+          <React.Fragment>
+            {this.props.views.main === 'home' && <SmartPlaylists></SmartPlaylists>}
+            {this.props.views.main === 'syncSpotify' && <ShowSync/>}
+          </React.Fragment>
+        }
+
+        {!this.props.user && <Loader>Testing</Loader>}
+
       </Container>
     );
   }
 }
 
-export default connect(null, {setUser, setAllPlaylists})(App);
+const mapStoreToProps = function ({views, user}) {
+  return {
+    views,
+    user
+  }
+}
+
+export default connect(mapStoreToProps, {setUser, setAllPlaylists})(App);

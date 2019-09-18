@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export function deleteSmartPlaylist (userID, playlistID) {
-  return axios.post (`/user/${userID}/smartplaylist/${playlistID}`)
+  return axios.delete (`/user/${userID}/smartplaylist/${playlistID}`)
     .then(results => {
       if (results.status !== 200) {
         throw new Errow (results);

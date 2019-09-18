@@ -24,7 +24,7 @@ const getAllSongsFromUser = async function getAllSongsFromUser (accessToken, opt
   requests[1] = options.includeLikedSongs ? getPlaylists(accessToken) : Promise.resolve([]);
   requests[2] = options.includedLikedAlbums ? getPlaylists(accessToken) : Promise.resolve([]);
 
-  const [retrievedPlaylists, retireivedLikedSongs, retrievedLikedAlbums] = await Promise.all(requrests);
+  const [retrievedPlaylists, retireivedLikedSongs, retrievedLikedAlbums] = await Promise.all(requests);
 }
 
 module.exports = {

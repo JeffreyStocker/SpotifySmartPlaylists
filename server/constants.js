@@ -45,6 +45,19 @@ module.exports = {
 
 
     //playlists
+    PLAYLIST_ADD_TRACKS_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
+    PLAYLIST_CHANGE_DETAILS_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}',
+    PLAYLIST_CREATE_PLAYLIST_URL: 'https://api.spotify.com/v1/users/{user_id}/playlists',
+    PLAYLIST_GET_CURRENT_USER_PLAYLIST_URL: 'https://api.spotify.com/v1/me/playlists',
+    PLAYLIST_GET_USER_PLAYLIST_URL: 'https://api.spotify.com/v1/users/{user_id}/playlists',
+    PLAYLIST_GET_COVER_IMAGE_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}/images',
+    PLAYLIST_GET_PLAYLIST_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}',
+    PLAYLIST_GET_PLAYLIST_TRACKS_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
+    getPlaylistTracks: (playlist_id) => `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
+    PLAYLIST_REMOVE_TRACKS_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
+    PLAYLIST_REORDER_TRACKS_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
+    PLAYLIST_REPLACE_TRACKS_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
+    PLAYLIST_UPLOAD_CUSTOM_COVER_IMAGE_URL: 'https://api.spotify.com/v1/playlists/{playlist_id}/images',
     /*
       POST 	/v1/playlists/{playlist_id}/tracks 	Add Tracks to a Playlist 	-
       PUT 	/v1/playlists/{playlist_id} 	Change a Playlist's Details 	-

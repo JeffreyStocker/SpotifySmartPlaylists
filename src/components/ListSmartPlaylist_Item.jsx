@@ -2,7 +2,7 @@ import React from 'react';
 import {Grid, Transition, Accordion, Button} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {addRulePlaylist, removeRulePlaylist, removePlaylist} from '../store/actions/smartPlaylists'
-
+import { removeSmartPlaylist } from '../thunks/deleteSmartPlaylists'
 import SelectModifier from './ListSmartPlaylists_SelectModifier.jsx';
 import Options from './ListSmartPlaylists_Options.jsx';
 import UpAndDownArrow from './UpAndDownArrow.jsx'
@@ -10,9 +10,6 @@ import AddAndSubract from './Button_AddAndSubtract.jsx';
 import ListSongs from './ListSongs.jsx';
 import PlaylistControls from './ListSmartPlaylistControls.jsx';
 import PropTypes from 'prop-types';
-
-import {likedTracks} from '../../ref/likedTracks.json';
-
 
 class Playlist_Item extends React.Component {
   constructor(props) {
@@ -46,7 +43,8 @@ class Playlist_Item extends React.Component {
   }
 
   deletePlaylist () {
-    this.props.removePlaylist(this.props.playlist);
+    removeSmartPlaylist(this.props.playlist);
+    // this.props.removePlaylist(this.props.playlist);
   }
 
 
@@ -112,7 +110,7 @@ class Playlist_Item extends React.Component {
                   Songs
                 </Accordion.Title>
                 <Accordion.Content active={subpanelIndex === 1}>
-                  {subpanelIndex === 1 && <ListSongs tracks={likedTracks} />}
+                  {subpanelIndex === 1 && <ListSongs tracks={[]} />}
                 </Accordion.Content>
               </Accordion>
             </Grid.Column>

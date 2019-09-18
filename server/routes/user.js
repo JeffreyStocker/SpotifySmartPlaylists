@@ -52,10 +52,10 @@ route.delete("/smartplaylist/:playlist", async ctx => {
   try {
     const {playlist} = ctx.params;
     const doc = ctx.user.smartPlaylists.id(playlist).remove();
-    await doc.save();
-    ctx.status === 200;
+    await ctx.user.save();
+    ctx.status = 200;
   } catch (err) {
-    ctx.status === 400;
+    ctx.status = 400;
   }
 })
 

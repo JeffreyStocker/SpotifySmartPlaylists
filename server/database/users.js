@@ -35,9 +35,10 @@ const usersSchema = mongoose.Schema({
 usersSchema.method('isExpired', function () {
   const {refreshTokenExpires, updatedAccessToken} = this;
   const dateDiff = Date.now() - updatedAccessToken;
-  const expirationTimeInMS = refreshTokenExpires * 1000
-  const marginOfError = 10000
-  if ( dateDiff > (expirationTimeInMS - marginOfError)) {
+  const expirationTimeInMS = refreshTokenExpires * 1000;
+  const marginOfError = 10000;
+
+  if ( (dateDiff > (expirationTimeInMS - marginOfError)) || isNaN(dateDiff)) {
     return true;
   } else {
     return false;

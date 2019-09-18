@@ -40,17 +40,22 @@ const getFromSpotify = function getFromSpotify (url, accessToken, options = {}) 
   .catch(err => {
     if (err.code === "ECONNREFUSED"){
       console.log ('err.refused', console.error (err))
-    } else if (err.reponse.status === 429) {
-      const timeout = err.Retry-After
-      return new Promise ((resolve, revoke) => {
-        setTimeout(() => {
-          request (url, accessToken, options)
-          .then(resolve)
-            .catch(revoke)
-          }, timeout)
-      })
-    } else {
-      throw new Error (err);
+    } else if (err.response && err.response.status) {
+      switch (err.response.status) {
+        case 429:
+          const timeout = err.Retry-After
+          return new Promise ((resolve, revoke) => {
+            setTimeout(() => {
+              request (url, accessToken, options)
+              .then(resolve)
+                .catch(revoke)
+              }, timeout)
+          })
+        case 401:
+          throw new Error ('401', err)
+        default:
+          throw new Error (err);
+      }
     }
   })
 }
@@ -58,7 +63,6 @@ const getFromSpotify = function getFromSpotify (url, accessToken, options = {}) 
 const getFromSpotifyWithLimits = async function getFromSpotifyWithLimits(url, accessToken, options = {}) {
   const items = [];
   let next = url;
-
   do {
     let request = await getFromSpotify(next, accessToken, generateRequestLimitOptions(accessToken, options))
       .then(data => data);
