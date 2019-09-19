@@ -1,10 +1,11 @@
 import {CHANGE_MAIN_VIEW} from '../actions/views';
 
 const defaultState = {
-  main: 'home'
+  main: 'home',
 }
 
-const reqMainViews = ['main', 'syncSpotify'];
+const reqMainViews = ['main', 'syncSpotify', 'playlist', 'smartPlaylist'];
+
 const checkMainViews = function (view) {
   return reqMainViews.includes(view);
 }

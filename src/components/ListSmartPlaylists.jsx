@@ -5,7 +5,7 @@ import {addPlaylist, removePlaylist, updatePlaylist} from '../store/actions/smar
 
 import {Accordion, Icon, Segment, Message} from 'semantic-ui-react';
 import PlaylistItem from './ListSmartPlaylist_Item.jsx';
-import Editable from './TitleEditable.jsx'
+import Editable from './TitleEditable.jsx';
 
 const handleUpdatePlaylist = function (updatePlaylist, playlist, index) {
   updatePlaylist(playlist, index);

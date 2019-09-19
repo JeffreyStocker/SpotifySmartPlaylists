@@ -2,7 +2,7 @@ import React from 'react';
 // import dexie from 'dexie'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {Icon, Container, Step} from 'semantic-ui-react';
+import {Icon, Container, Step, Model} from 'semantic-ui-react';
 import {syncDataFromSpotify} from '../utilites/syncDataFromSpotify';
 
 const steps = ['Getting Liked Albums', 'Getting Liked Tracks', 'Getting Playlists', 'Processing Data', 'Adding To Database']
@@ -24,26 +24,30 @@ class ShowSync extends React.PureComponent {
     syncDataFromSpotify(this.props.user.accessToken, this.increaseStep.bind(this));
   }
 
+  handleClose () {
+
+  }
+
   render () {
     return (
-      <Container fluid>
-        Syncing Data from spotify
         <Container fluid>
-          <Step.Group vertical>
-            {
-              steps.map((name, index) => (
-                <Step completed={this.state.currentStep > index} key={name}>
-                  <Icon name="sync"></Icon>
-                  <Step.Content>
-                    <Step.Title>{name}</Step.Title>
-                  </Step.Content>
+          Syncing Data from spotify
+          <Container fluid>
+            <Step.Group vertical>
+              {
+                steps.map((name, index) => (
+                  <Step completed={this.state.currentStep > index} key={name}>
+                    <Icon name="sync"></Icon>
+                    <Step.Content>
+                      <Step.Title>{name}</Step.Title>
+                    </Step.Content>
 
-                </Step>
-              ))
-            }
-          </Step.Group>
+                  </Step>
+                ))
+              }
+            </Step.Group>
+          </Container>
         </Container>
-      </Container>
     );
   }
 }

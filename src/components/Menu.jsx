@@ -13,7 +13,7 @@ class MainMenu extends React.PureComponent {
   constructor(props) {
     super(props);
     this.handleNewPlaylist = this.handleNewPlaylist.bind(this);
-    this.handleSyncSongs = this.handleSyncSongs.bind(this);
+    this.changeView = this.changeView.bind(this);
   }
 
   handleNewPlaylist () {
@@ -26,8 +26,8 @@ class MainMenu extends React.PureComponent {
     }
   }
 
-  handleSyncSongs () {
-    this.props.changeMainView('syncSpotify');
+  changeView(name) {
+    this.props.changeMainView(name)
   }
 
   render () {
@@ -36,7 +36,9 @@ class MainMenu extends React.PureComponent {
         <Menu.Item> <Button><Login></Login></Button></Menu.Item>
         <Menu.Item> <Button onClick={this.handleNewPlaylist}>Add Smart Playlist</Button></Menu.Item>
         <Menu.Item> <a href="/test?id=kagesennin"><Button className="button">test</Button></a></Menu.Item>
-        <Menu.Item><Button onClick={this.handleSyncSongs}>Sync Data From Spotify</Button></Menu.Item>
+        <Menu.Item><Button onClick={() => this.changeView('syncSpotify')}>Sync Data From Spotify</Button></Menu.Item>
+        <Menu.Item><Button onClick={() => this.changeView('smartPlaylist')}>Smart Playlists</Button></Menu.Item>
+        <Menu.Item><Button onClick={() => this.changeView('playlist')}>Playlists</Button></Menu.Item>
       </Menu>
     )
   }
