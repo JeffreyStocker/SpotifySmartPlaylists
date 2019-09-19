@@ -6,7 +6,7 @@ import dexieDB from '../services/dixieStore.js'
 export default function (props) {
   const tracks = props;
   const [foundTracks, setTracks] = useState(null);
-  console.log ('run')
+
   useEffect(() => {
     if (!foundTracks) {
       Promise.all(tracks.tracks.map(async (track) => {
@@ -20,6 +20,6 @@ export default function (props) {
   })
 
   return (
-    !foundTracks ? null : <ListSongs tracks={foundTracks}></ListSongs>
+    !foundTracks ? null : <ListSongs {...props} tracks={foundTracks}></ListSongs>
   )
 }
