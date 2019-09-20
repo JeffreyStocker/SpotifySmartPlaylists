@@ -2,7 +2,6 @@ const Router = require ('@koa/router')
 const router = Router();
 const {getToken} = require ('../spotify/authorize');
 const {getUserData} = require ('./../spotify/userData');
-const {getPlaylists} = require ('./../spotify/playlists');
 const {createOrUpdateUser} = require ('../database/users');
 
 router.post('/authorize', async function (ctx, next) {
@@ -35,6 +34,15 @@ router.post('/authorize', async function (ctx, next) {
   }
 
   return ctx;
+})
+
+router.get ('authorize/refresh', async ctx => {
+  if (ctx.isAuth) {
+    return {
+      accessToken: ctx.user.accessToken,
+      accessTokenExpire: ctx.user.refreshTokenExpires - (Date.now() - ctx.user.updatedAccessToken),
+    }
+  }
 })
 
 module.exports = router;
