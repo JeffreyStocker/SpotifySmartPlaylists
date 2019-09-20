@@ -9,20 +9,4 @@ db.version(1).stores({
   playlists: '&id',
 });
 
-// export const artistsDB = new dexie('artist');
-// export const tracksDB = new dexie('tracks');
-// export const playlistsDB = new dexie('playlists');
-
-// artistsDB.version(1).stores({
-//   artist: "&id, *genre"
-// })
-
-
-
-// export default {
-//   tracksDB,
-//   artistsDB,
-//   playlistsDB
-// };
-
 export default db;

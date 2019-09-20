@@ -1,29 +1,22 @@
 import React from 'react';
-import {connect} from 'react-redux';
-
-import {addPlaylist, removePlaylist, updatePlaylist} from '../store/actions/smartPlaylists';
-
-import {Accordion, Icon, Segment, Message} from 'semantic-ui-react';
+import {Accordion, Icon, Segment, Message, Menu, Container, Button} from 'semantic-ui-react';
 import PlaylistItem from './ListSmartPlaylist_Item.jsx';
 import Editable from './TitleEditable.jsx';
 
-const handleUpdatePlaylist = function (updatePlaylist, playlist, index) {
-  updatePlaylist(playlist, index);
+import {connect} from 'react-redux';
+import {addPlaylist, removePlaylist, updatePlaylist} from '../store/actions/smartPlaylists';
+import {requestAddToPlaylist} from '../services/smartPlaylistServices';
 
-}
-const handleRemovePlaylist = function (removePlaylist, index) {
-  removePlaylist(index);
-}
-const handleAddPlaylist = function (addPlaylist, index) {
-  addPlaylist(index);
-}
 
 class ListSmartPlaylist extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {activeIndex: 0};
+    this.state = {activeIndex: -1};
     this.handleAccordianClick = this.handleAccordianClick.bind(this);
-
+    this.handleNewPlaylist = this.handleNewPlaylist.bind(this);
+    this.handleUpdatePlaylist = this.handleUpdatePlaylist.bind(this);
+    this.handleRemoveRule = this.handleRemoveRule.bind(this);
+    this.handleAddRule = this.handleAddRule.bind(this);
   }
 
   handleAccordianClick(index) {
@@ -33,7 +26,30 @@ class ListSmartPlaylist extends React.Component{
   }
 
   handlePlaylistUpdate() {
+    //wip
+  }
 
+  handleNewPlaylist () {
+    const id = this.props.user && this.props.user.id;
+    if (id) {
+      requestAddToPlaylist(id)
+        .then(playlistData => {
+          this.props.addPlaylist(playlistData);
+        })
+    }
+    this.setState({activeIndex: -1})
+  }
+
+  handleUpdatePlaylist (playlist, index) {
+    this.updatePlaylist(playlist, index);
+  }
+
+  handleRemoveRule (index) {
+    this.removePlaylist(index);
+  }
+
+  handleAddRule (index) {
+    this.addPlaylist(index);
   }
 
   render() {
@@ -41,38 +57,43 @@ class ListSmartPlaylist extends React.Component{
     const {state: {activeIndex}} = this;
 
     return (
-      <Accordion fluid>
-        { smartPlaylists.length > 0
-          ?
+      <Container fluid>
+        <Menu secondary>
+          <Menu.Item><Button onClick={this.handleNewPlaylist}>Add Playlist</Button></Menu.Item>
+        </Menu>
+        <Accordion fluid>
+          { smartPlaylists.length > 0
+            ?
             smartPlaylists.map((playlist, index) => (
-            <Segment key={playlist._id}>
-              <Accordion.Title onClick={() => this.handleAccordianClick(index)} active={activeIndex === index}>
-                <Icon name='dropdown' /><Editable text={playlist.name}/>
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === index}>
-                <PlaylistItem
-                  index={index}
-                  playlist={playlist}
-                  addPlaylist={() => handleAddPlaylist(props.addPlaylist, index)}
-                  removePlaylist={() => handleRemovePlaylist(props.removePlaylist, index)}
-                  updatePlaylist={() => handleUpdatePlaylist(props.updatePlaylist, playlist, index)}
-                />
-              </Accordion.Content>
-            </Segment>
-            ))
-          :
-            <Message>
-              <Message.Header>Smart Playlists</Message.Header>
-              <Message.Content>No Smart Playlists</Message.Content>
-            </Message>
-        }
-      </Accordion>
+              <Segment key={playlist._id}>
+                <Accordion.Title onClick={() => this.handleAccordianClick(index)} active={activeIndex === index}>
+                  <Icon name='dropdown' /><Editable text={playlist.name}/>
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === index}>
+                  <PlaylistItem
+                    index={index}
+                    playlist={playlist}
+                    addPlaylist={() => handleAddRule(index)}
+                    removePlaylist={() => handleRemoveRule(index)}
+                    updatePlaylist={() => handleUpdatePlaylist(playlist, index)}
+                    />
+                </Accordion.Content>
+              </Segment>
+              ))
+            :
+              <Message>
+                <Message.Header>Smart Playlists</Message.Header>
+                <Message.Content>No Smart Playlists</Message.Content>
+              </Message>
+          }
+        </Accordion>
+      </Container>
     )
   }
 }
 
-const mapStateToProps = function mapStateToProps ({smartPlaylists}) {
-  return {smartPlaylists}
+const mapStateToProps = function mapStateToProps ({smartPlaylists, user}) {
+  return {smartPlaylists, user}
 }
 
 const actions = {

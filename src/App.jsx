@@ -1,4 +1,6 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+
 import Menu from './components/Menu.jsx';
 import SmartPlaylists from './components/ListSmartPlaylists.jsx';
 import {Container, Loader} from 'semantic-ui-react';
@@ -10,14 +12,6 @@ import ListPlaylists from './components/ListPlaylists.jsx';
 import {connect} from 'react-redux';
 import {setUser} from './store/actions/user';
 import {setAllPlaylists} from './store/actions/smartPlaylists';
-
-const test = function test (props) {
-  return (
-    <div>
-      {props.children.forEach()}
-    </div>
-  )
-}
 
 class App extends React.Component {
   constructor (props) {
@@ -38,20 +32,19 @@ class App extends React.Component {
 
   render () {
     return (
-      <Container>
-        <Menu></Menu>
-        {!this.props.user && <Message>Login To Continue</Message>}
-        {this.props.user &&
-          <React.Fragment>
-            {this.props.views.main === 'smartPlaylist' && <SmartPlaylists></SmartPlaylists>}
-            {this.props.views.main === 'syncSpotify' && <ShowSync/>}
-            {this.props.views.main === 'playlist' && <ListPlaylists/>}
-          </React.Fragment>
-        }
-
-        {!this.props.user && <Loader>Testing</Loader>}
-
-      </Container>
+      <Router>
+        <Container>
+          <Menu></Menu>
+          {!this.props.user && <Message>Login To Continue</Message>}
+          {this.props.user &&
+            <Switch>
+              <Route path="/smartplaylist" component={SmartPlaylists}></Route>
+              <Route path="/sync" component={ShowSync}></Route>
+              <Route path="/playlist" component={ListPlaylists}></Route>
+            </Switch>
+          }
+        </Container>
+      </Router>
     );
   }
 }
@@ -64,3 +57,17 @@ const mapStoreToProps = function ({views, user}) {
 }
 
 export default connect(mapStoreToProps, {setUser, setAllPlaylists})(App);
+
+/*
+          {!this.props.user && <Message>Login To Continue</Message>}
+          {this.props.user &&
+            <Switch>
+              <Route path="/smartplaylist" component={SmartPlaylists}></Route>
+              <Route path="/sync" component={ShowSync}></Route>
+              <Route path="/playlist" component={ListPlaylists}></Route>
+            </Switch>
+          }
+
+
+
+*/
