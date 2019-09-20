@@ -23,8 +23,8 @@ class App extends React.Component {
     const userID = localStorage.getItem('userID');
     if (cookie.get('koa:sess') && userID) {
       axios.get(`/user/${userID}`)
-        .then(({data: {name, accessToken, smartPlaylists, id}}) => {
-          this.props.setUser({name, id, accessToken});
+        .then(({data: {name, accessToken, smartPlaylists, id, accessTokenExpire}}) => {
+          this.props.setUser({name, id, accessToken, accessTokenExpire});
           this.props.setAllPlaylists(smartPlaylists);
         })
     }

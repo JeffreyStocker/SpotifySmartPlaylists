@@ -20,7 +20,8 @@ route.get('/', async ctx => {
     id: ctx.user.id,
     name: ctx.user.name,
     smartPlaylists: ctx.user.smartPlaylists,
-    accessToken: ctx.user.accessToken
+    accessToken: ctx.user.accessToken,
+    accessTokenExpire: ctx.user.refreshTokenExpires
   }
 })
 
