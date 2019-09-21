@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { HashRouter } from 'react-router-dom'
 
 import Menu from './components/Menu.jsx';
 import SmartPlaylists from './components/ListSmartPlaylists.jsx';
@@ -32,7 +33,7 @@ class App extends React.Component {
 
   render () {
     return (
-      <Router>
+      <HashRouter>
         <Container>
           <Menu></Menu>
           {!this.props.user && <Message>Login To Continue</Message>}
@@ -44,7 +45,7 @@ class App extends React.Component {
             </Switch>
           }
         </Container>
-      </Router>
+      </HashRouter>
     );
   }
 }
