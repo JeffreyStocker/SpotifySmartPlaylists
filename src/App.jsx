@@ -83,17 +83,3 @@ const mapStoreToProps = function ({views, user}) {
 }
 
 export default connect(mapStoreToProps, {setUser, setAllPlaylists})(App);
-
-/*
-          {!this.props.user && <Message>Login To Continue</Message>}
-          {this.props.user &&
-            <Switch>
-              <Route path="/smartplaylist" component={SmartPlaylists}></Route>
-              <Route path="/sync" component={ShowSync}></Route>
-              <Route path="/playlist" component={ListPlaylists}></Route>
-            </Switch>
-          }
-
-
-
-*/
