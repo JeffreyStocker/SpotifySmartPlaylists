@@ -10,3 +10,9 @@ SPOTIFY_REDIRECT = http://localhost:8080/dist/savelogininfo.html
 
 //port for server;
 PORT = 8080;
+
+//mongoose server;
+MONGO_DB_URL = FILL ME IN
+
+//Koa Session Key
+SESSION_KEY = FILL ME IN
