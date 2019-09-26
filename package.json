@@ -11,7 +11,8 @@
     "webpack": "webpack --watch",
     "nodemon": "nodemon --inspect --ignore src/ --ignore dist/ ./server/server.js ",
     "start": "node ./server/server.js",
-    "test": "jest"
+    "test": "jest",
+    "webpackStats": "webpack --json > stats.json"
   },
   "keywords": [
     "spotify",
