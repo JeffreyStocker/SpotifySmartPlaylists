@@ -1,6 +1,5 @@
 const axios = require ('axios');
 const genAuthHeader = require('./authorize').generateAccessAuthorizationStr;
-const {getAndUpdateRefreshTokenByToken} = require ('../database/users');
 const {REQUEST_LIMIT} = require ('../constants');
 
 const generateRequestOptions = function generateRequestOptions (accessToken, options = {}) {
