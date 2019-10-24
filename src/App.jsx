@@ -1,6 +1,3 @@
-import cookie from'js-cookie';
-import axios from 'axios';
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Menu from './components/Menu.jsx';
@@ -9,11 +6,14 @@ import { Container, Loader, Message, Segment, Dimmer } from 'semantic-ui-react';
 import ListPlaylists from './components/ListPlaylists.jsx';
 import ShowSync from './components/ShowSync.jsx';
 
-import { HashRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom';
 
 import {connect} from 'react-redux';
 import {setUser} from './store/actions/user';
 import {setAllPlaylists} from './store/actions/smartPlaylists';
+
+import checkLogin from './thunks/checkLogin';
+import cookie from'js-cookie';
 
 const route = function (isLoaded, user) {
   if (isLoaded) {
@@ -45,22 +45,23 @@ class App extends React.Component {
 
   componentDidMount() {
     const userID = localStorage.getItem('userID');
-    if (cookie.get('koa:sess') && userID) {
-      axios.get(`/user/${userID}`)
-        .then(({data: {name, accessToken, smartPlaylists, id, accessTokenExpire}}) => {
-          this.props.setUser({name, id, accessToken, accessTokenExpire});
-          this.props.setAllPlaylists(smartPlaylists);
-        })
-        .catch(err => {
-          console.err (err);
-          this.props.setUser({
-            name: null
-          });
-        })
-        .then(() => {
-          this.setState({isLoaded: true})
-        })
-    }
+    Promise.resolve ({})
+      .then(() => {
+        if (cookie.get('koa:sess') && userID) {
+          return checkLogin()
+            .catch(err => {
+              console.err (err);
+            })
+            .then(() => {
+            })
+          }
+      })
+      .then(() => {
+        this.setState({isLoaded: true});
+        this.props.setUser({
+          name: null
+        });
+      })
   }
 
   render () {
