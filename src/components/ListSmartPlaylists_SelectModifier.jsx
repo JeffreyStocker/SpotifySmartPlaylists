@@ -1,35 +1,26 @@
 import React from 'react';
 import {Dropdown} from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
-const modifiers = ['greater than', 'less than', 'equal to'].map(name => ({text: name, value: name, key: name}));
-
-const conditions = {
-  number: ['greater than', 'less than', 'equal to', 'not greater to', 'is between'],
-  text: ['includes', 'does not include', 'is', 'is not', 'contains', 'does not contain', 'starts with', 'end with'],
-  booleanText: ['is', 'is not'],
-  boolean: ['is true', 'is not true']
-}
-const primary = [
-  ['Author', conditions.text],
-  ['Track', conditions.text],
-  ['Album', conditions.text],
-  ['Artist\'s Genre', conditions.text]
-]
-
-
-const target = {
-
+const genOptions = function (options = []) {
+  if (Array.isArray(options)) {
+    return options.map(name => ({text: name, value: name, key: name}));
+  }
+  return [];
 }
 
 export default class ListPlaylists_SelectModifier extends React.PureComponent{
   constructor(props) {
     super (props);
     this.state = {selected: null}
-    this.onChangeSelected = this.onChangeSelected.bind(this)
+    this.options = !props.options ? [] : genOptions(props.options);
+    this.onChangeSelected = this.onChangeSelected.bind(this);
   }
+
 
   onChangeSelected (evt) {
     this.setState({selected: evt.target.innerText});
+    this.props.onChange(evt, this.props, evt.target.innerText);
   }
 
   render() {
@@ -37,12 +28,19 @@ export default class ListPlaylists_SelectModifier extends React.PureComponent{
       <Dropdown
         selection
         fluid
+        disabled={!this.options}
         placeholder="Select One"
-        options={modifiers}
-        value={this.state.selected}
+        options={genOptions(this.props.options)}
+        // options={this.options}
+        value={this.props.value}
         onChange={this.onChangeSelected}
       >
       </Dropdown>
     )
   }
+}
+
+ListPlaylists_SelectModifier.propTypes = {
+  // options: PropTypes.array,
+  // value: PropTypes.string
 }

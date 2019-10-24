@@ -5,14 +5,15 @@ import {
   ADD_RULE_PLAYLIST,
   REMOVE_RULE_PLAYLIST,
   SET_ALL_PLAYLISTS,
-  REMOVE_PLAYLIST_BY_INDEX
+  REMOVE_PLAYLIST_BY_INDEX,
+  UPDATE_PLAYLIST_RULE_BY_INDEX
 } from '../actions/smartPlaylists'
 
 const defaultPlaylist = function () {
   return {
     name: 'test',
     spotifyID: Math.random(),
-    rules: [],
+    rules: [defaultRule()],
     options: {
       liveUpdate: false,
       limit: 10000,
@@ -29,10 +30,19 @@ const defaultPlaylist = function () {
   }
 }
 
+const defaultRule = function () {
+  return {
+    isSubrule: false,
+    target: '',
+    mod: '',
+    filter: []
+  }
+}
+
 const reducer = function (state = [], action) {
-  const {type, payload} = action;
-  let newState;
-  let playlist, index, origPlaylist;
+  const {type, payload = {}} = action;
+  let newState, origPlaylist;
+  let {playlist, index, rule} = payload;
 
   switch(type) {
     case ADD_PLAYLIST:
@@ -50,7 +60,6 @@ const reducer = function (state = [], action) {
       break;
 
     case REMOVE_PLAYLIST:
-      let { playlist } = payload;
       newState  = state.reduce ((acc, statePlaylist) => {
         if (statePlaylist !== playlist) {
           acc.push(statePlaylist);
@@ -60,6 +69,9 @@ const reducer = function (state = [], action) {
       break
 
     case UPDATE_PLAYLIST:
+      newState = state.map(oldPlaylist => {
+        return oldPlaylist._id === playlist._id ? playlist : oldPlaylist;
+      })
       break;
 
     case ADD_RULE_PLAYLIST:
@@ -80,7 +92,8 @@ const reducer = function (state = [], action) {
       break;
 
     case REMOVE_RULE_PLAYLIST:
-      ({index, playlist: origPlaylist} = payload);
+
+      ({playlist: origPlaylist} = payload);
 
       newState = state.map((playlist) => {
         const rules = playlist.rules;
@@ -94,6 +107,19 @@ const reducer = function (state = [], action) {
 
     case SET_ALL_PLAYLISTS:
       newState = payload;
+      break;
+
+    case UPDATE_PLAYLIST_RULE_BY_INDEX:
+      ({playlist: origPlaylist} = payload);
+
+      newState = state.map(oldPlaylist => {
+        if (oldPlaylist === origPlaylist) {
+          const newPlaylist = Object.assign({}, oldPlaylist)
+          newPlaylist.rules[index] = rule;
+          return newPlaylist;
+        }
+        return oldPlaylist;
+      })
       break;
   }
   return newState ? newState : state;

@@ -60,11 +60,22 @@ route.delete("/smartplaylist/:playlist", async ctx => {
   }
 })
 
-route.put("/smartplaylist/:playlist", async ctx => {
+route.patch("/smartplaylist/:playlist", async ctx => {
+
   const {playlist} = ctx.params;
+  let body = null;
+
+  try {
+    body = JSON.parse(ctx.request.rawBody);
+  } catch(err) {
+    ctx.status = 400;
+    ctx.body = 'Invalid playlist';
+    return;
+  }
   const doc = ctx.user.smartPlaylists.id(playlist);
-  ctx.body && ctx.body.playist && Object.assign(doc, ctx.body.playlist);
+  body && body.playlist && Object.assign(doc, body.playlist);
   ctx.user.save();
+  ctx.status = 200;
 })
 
 module.exports = route;

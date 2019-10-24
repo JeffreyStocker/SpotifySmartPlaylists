@@ -1,15 +1,15 @@
 import React from 'react';
 import {Grid, Transition, Accordion, Button} from 'semantic-ui-react';
 import {connect} from 'react-redux';
-import {addRulePlaylist, removeRulePlaylist, removePlaylist} from '../store/actions/smartPlaylists'
-import { removeSmartPlaylist } from '../thunks/deleteSmartPlaylists'
-import SelectModifier from './ListSmartPlaylists_SelectModifier.jsx';
+import {addRulePlaylist, removeRulePlaylist, removePlaylist, updateRuleByIndex} from '../store/actions/smartPlaylists';
+import { removeSmartPlaylist } from '../thunks/deleteSmartPlaylists';
+import { updatePlaylistRule } from '../thunks/smartPlaylists';
 import Options from './ListSmartPlaylists_Options.jsx';
 import UpAndDownArrow from './UpAndDownArrow.jsx'
-import AddAndSubract from './Button_AddAndSubtract.jsx';
 import ListSongs from './ListSongs.jsx';
 import PlaylistControls from './ListSmartPlaylistControls.jsx';
 import PropTypes from 'prop-types';
+import RuleGroup from './ListSmartPlaylist_RuleGroup.jsx';
 
 class Playlist_Item extends React.Component {
   constructor(props) {
@@ -23,6 +23,7 @@ class Playlist_Item extends React.Component {
     this.handleAddRule = this.handleAddRule.bind(this);
     this.handleRemoveRule = this.handleRemoveRule.bind(this);
     this.deletePlaylist = this.deletePlaylist.bind(this);
+    this.handleUpdateRule = this.handleUpdateRule.bind(this);
 
   }
 
@@ -44,12 +45,10 @@ class Playlist_Item extends React.Component {
 
   deletePlaylist () {
     removeSmartPlaylist(this.props.playlist);
-    // this.props.removePlaylist(this.props.playlist);
   }
 
-
-  handleCardClick(evt) {
-    this.handleIsVisibleRuleChange()
+  handleUpdateRule (index, updatedRule) {
+    updatePlaylistRule(this.props.playlist, index, updatedRule);
   }
 
   render () {
@@ -58,8 +57,6 @@ class Playlist_Item extends React.Component {
       state: { isVisibleRules, displayOptions, subpanelIndex },
       props: { playlist },
       handleAddRule,
-      handleCardClick,
-
     } = this;
 
     return (
@@ -76,17 +73,18 @@ class Playlist_Item extends React.Component {
           </Grid.Row>
 
           {playlist.rules.map((rule, index) => (
-            <Grid.Row key={Math.random()}>
-              <Grid.Column width={2} verticalAlign="middle">
-                <AddAndSubract
-                  increase={(evt) => this.handleAddRule(evt, index)}
-                  decrease={(evt) => this.handleRemoveRule(evt, index)}
-                />
-              </Grid.Column>
-              <Grid.Column width={4}><SelectModifier/></Grid.Column>
-              <Grid.Column width={4}><SelectModifier/></Grid.Column>
-              <Grid.Column width={6}><SelectModifier/></Grid.Column>
-            </Grid.Row>
+            // <Grid.Row key={Math.random()}>
+            //   <Grid.Column width={2} verticalAlign="middle">
+            //     <AddAndSubract
+            //       increase={(evt) => this.handleAddRule(evt, index)}
+            //       decrease={(evt) => this.handleRemoveRule(evt, index)}
+            //     />
+            //   </Grid.Column>
+            //   <Grid.Column width={4}><SelectModifier/></Grid.Column>
+            //   <Grid.Column width={4}><SelectModifier/></Grid.Column>
+            //   <Grid.Column width={6}><SelectModifier/></Grid.Column>
+            // </Grid.Row>
+            <RuleGroup onChange={(updatedRule) => this.handleUpdateRule(index, updatedRule)} key={index} rule={rule}/>
           ))}
 
           <Grid.Row>

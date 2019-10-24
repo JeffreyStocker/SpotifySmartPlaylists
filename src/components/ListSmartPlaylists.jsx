@@ -70,13 +70,15 @@ class ListSmartPlaylist extends React.Component{
                   <Icon name='dropdown' /><Editable text={playlist.name}/>
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === index}>
-                  <PlaylistItem
-                    index={index}
-                    playlist={playlist}
-                    addPlaylist={() => handleAddRule(index)}
-                    removePlaylist={() => handleRemoveRule(index)}
-                    updatePlaylist={() => handleUpdatePlaylist(playlist, index)}
-                    />
+                  {activeIndex === index &&
+                    <PlaylistItem
+                      index={index}
+                      playlist={playlist}
+                      addPlaylist={() => handleAddRule(index)}
+                      removePlaylist={() => handleRemoveRule(index)}
+                      updatePlaylist={() => handleUpdatePlaylist(playlist, index)}
+                      />
+                  }
                 </Accordion.Content>
               </Segment>
               ))
