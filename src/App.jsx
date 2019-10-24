@@ -45,7 +45,7 @@ class App extends React.Component {
 
   componentDidMount() {
     const userID = localStorage.getItem('userID');
-    Promise.resolve ()
+    Promise.resolve()
       .then(() => {
         if (cookie.get('koa:sess') && userID) {
           return checkLogin(userID);
