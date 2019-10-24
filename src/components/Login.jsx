@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
+import {Button} from 'semantic-ui-react';
+
 import {connect} from 'react-redux';
 import {setUser} from '../store/actions/user';
 import {setAllPlaylists} from '../store/actions/smartPlaylists';
@@ -59,7 +61,7 @@ class Login extends React.Component {
 
   render () {
     return (
-      <a href={link} onClick={this.clickLink.bind(this)} target="spotify_login">Login</a>
+      <a href={link} onClick={this.clickLink.bind(this)} target="spotify_login"><Button>Login</Button></a>
     )
   }
 }

@@ -14,11 +14,11 @@ class MainMenu extends React.PureComponent {
   render () {
     return (
       <Menu>
-        <Menu.Item> <Button><Login></Login></Button></Menu.Item>
-        <Menu.Item> <a href="/test?id=kagesennin"><Button className="button">test</Button></a></Menu.Item>
+        {/* <Menu.Item> <a href="/test?id=kagesennin"><Button className="button">test</Button></a></Menu.Item> */}
         <Menu.Item><Link to='/sync'><Button>Sync Data From Spotify</Button></Link></Menu.Item>
         <Menu.Item><Link to='/smartplaylist'><Button>Smart Playlists</Button></Link></Menu.Item>
         <Menu.Item><Link to='/playlist'><Button>Playlists</Button></Link></Menu.Item>
+        <Menu.Item position='right'><Login></Login></Menu.Item>
       </Menu>
     )
   }
