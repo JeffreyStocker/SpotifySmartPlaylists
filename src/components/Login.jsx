@@ -6,6 +6,8 @@ import {Button} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {setUser} from '../store/actions/user';
 import {setAllPlaylists} from '../store/actions/smartPlaylists';
+import logMeOut from '../thunks/logout';
+import logout from '../thunks/logout';
 
 const link_backup = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${process.env.SPOTIFY_REDIRECT}`;
 const linkOptions = {
@@ -20,6 +22,13 @@ const linkOptions = {
   client_id: process.env.CLIENT_ID,
 }
 const link = `https://accounts.spotify.com/authorize?${qs.stringify(linkOptions)}`
+
+const isLoggedIn = function isLoggedIn (user) {
+  if (user && user.name) {
+    return true;
+  }
+  return false;
+}
 
 class Login extends React.Component {
   constructor(props) {
@@ -55,13 +64,25 @@ class Login extends React.Component {
   }
 
   clickLink () {
-    delete window.localStorage.code;
-    this.timer = setInterval(this.timerFunction, 100)
+    console.log (isLoggedIn(this.props.user))
+    if (isLoggedIn(this.props.user)) {
+      delete window.localStorage.code;
+      logMeOut(this.props.user.name);
+    } else {
+      delete window.localStorage.code;
+      this.timer = setInterval(this.timerFunction, 100)
+    }
   }
 
   render () {
     return (
-      <a href={link} onClick={this.clickLink.bind(this)} target="spotify_login"><Button>Login</Button></a>
+      <React.Fragment>
+      {
+        isLoggedIn(this.props.user) ?
+        <Button onClick={this.clickLink.bind(this)}>Logout</Button> :
+        <a href={link} onClick={this.clickLink.bind(this)} target="spotify_login"><Button>Login</Button></a>
+      }
+      </React.Fragment>
     )
   }
 }

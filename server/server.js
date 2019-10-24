@@ -25,6 +25,7 @@ const database = require ('./database/database');
 const authorize = require('./routes/authorize');
 const test = require ('./routes/routeTest');
 const users = require ('./routes/user.js');
+const logout = require ('./routes/logout.js');
 // const playlist = require ('./routes/playlist.js');
 
 const app = new koa();
@@ -45,6 +46,7 @@ app.use(static(__dirname + '/../dist'))
 
 app.use(authorize.routes(), authorize.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
+app.use(logout.routes(), logout.allowedMethods());
 // app.use(playlist.routes(), playlist.allowedMethods());
 app.use(test.routes(), test.allowedMethods());
 

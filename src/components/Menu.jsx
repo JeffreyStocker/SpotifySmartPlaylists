@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { connect } from 'react-redux';
 
 import {Menu, Button} from 'semantic-ui-react';
-import Login from './Login.jsx'
+import Login from './Login.jsx';
 
 class MainMenu extends React.PureComponent {
   constructor(props) {
@@ -18,7 +18,7 @@ class MainMenu extends React.PureComponent {
         <Menu.Item><Link to='/sync'><Button>Sync Data From Spotify</Button></Link></Menu.Item>
         <Menu.Item><Link to='/smartplaylist'><Button>Smart Playlists</Button></Link></Menu.Item>
         <Menu.Item><Link to='/playlist'><Button>Playlists</Button></Link></Menu.Item>
-        <Menu.Item position='right'><Login></Login></Menu.Item>
+        <Menu.Item position='right'><Login user={this.props.user}></Login></Menu.Item>
       </Menu>
     )
   }

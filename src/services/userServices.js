@@ -16,4 +16,7 @@ export function getUser (userID) {
   return axios.get(`/user/${userID}`);
 }
 
+export function logoutUser (userID) {
+  return axios.get (`/logout/${userID}`);
+}
 // export const checkAuth = checkAuth;
