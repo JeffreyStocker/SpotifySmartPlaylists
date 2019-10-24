@@ -15,7 +15,7 @@ const SESSION_CONFIG = {
 };
 //modules
 const koa = require ('koa');
-const static = require ('koa-static')
+const koaStatic = require ('koa-static')
 const bodyParser = require('koa-bodyparser');
 const qs = require('koa-qs');
 const session = require ('koa-session');
@@ -42,7 +42,7 @@ app.use(bodyParser());
 //   await next();
 // })
 app.use(require('./middleware/checkToken'))
-app.use(static(__dirname + '/../dist'))
+app.use(koaStatic(__dirname + '/../dist'))
 
 app.use(authorize.routes(), authorize.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
