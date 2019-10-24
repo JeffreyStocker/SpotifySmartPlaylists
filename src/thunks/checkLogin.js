@@ -12,5 +12,5 @@ export default function checkLogin (userID) {
     .catch(err => {
       console.error (err);
       store.dispatch(setUser({ name: null }));
-    })
+    });
 }

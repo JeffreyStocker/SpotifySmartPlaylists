@@ -15,7 +15,7 @@ const SESSION_CONFIG = {
 };
 //modules
 const koa = require ('koa');
-const koaStatic = require ('koa-static')
+const koaStatic = require ('koa-static');
 const bodyParser = require('koa-bodyparser');
 const qs = require('koa-qs');
 const session = require ('koa-session');
@@ -36,13 +36,13 @@ app.keys = [process.env.SESSION_KEY || 'Semi Secret Session Key #2315$@$'];
 qs(app);
 app.use(require('./middleware/simpleTimerLogger'));
 app.use(require('./middleware/checkAuthorization').checkAuth);
-app.use(session(SESSION_CONFIG, app))
+app.use(session(SESSION_CONFIG, app));
 app.use(bodyParser());
 // app.use(async (ctx, next) => {
 //   await next();
 // })
-app.use(require('./middleware/checkToken'))
-app.use(koaStatic(__dirname + '/../dist'))
+app.use(require('./middleware/checkToken'));
+app.use(koaStatic(__dirname + '/../dist'));
 
 app.use(authorize.routes(), authorize.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
@@ -50,4 +50,4 @@ app.use(logout.routes(), logout.allowedMethods());
 // app.use(playlist.routes(), playlist.allowedMethods());
 app.use(test.routes(), test.allowedMethods());
 
-app.listen(port, () => console.log(`App listening on port ${port}!`))
+app.listen(port, () => console.log(`App listening on port ${port}!`));
