@@ -5,7 +5,6 @@ const route = Router({
 });
 
 const checkAuth = async (user, ctx, next) => {
-  // const {user} = ctx.params;
   if (!ctx.auth || user !== ctx.user.id) {
     ctx.status = 400;
     return;
@@ -39,14 +38,14 @@ route.post("/smartplaylist", async ctx => {
   const playlist = ctx.user.smartPlaylists.create({});
   await ctx.user.smartPlaylists.push(playlist);
   await ctx.user.save();
-  ctx.body = playlist
+  ctx.body = playlist;
 
 })
 
 route.get("/smartplaylist/:playlist", async ctx => {
   const {playlist} = ctx.params;
   const doc = ctx.user.smartPlaylists.id(playlist);
-  ctx.body = doc
+  ctx.body = doc;
 })
 
 route.delete("/smartplaylist/:playlist", async ctx => {
