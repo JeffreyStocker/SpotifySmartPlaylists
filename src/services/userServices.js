@@ -19,4 +19,8 @@ export function getUser (userID) {
 export function logoutUser (userID) {
   return axios.get (`/logout/${userID}`);
 }
+
+export function getUpdatedAccessToken(userID) {
+  return axios.get('authorize/refresh');
+}
 // export const checkAuth = checkAuth;
