@@ -7,20 +7,20 @@ export default function PopOverRequest ({text = '', buttonText = 'Click Me', onC
 
   return (
     <Modal
-    basic
-    open={isOpen}
-    trigger={<Button onClick={() => setOpen(true)}>{buttonText}</Button>}
+      basic
+      open={isOpen}
+      trigger={<Button onClick={() => setOpen(true)}>{buttonText}</Button>}
     >
       <Header>{text}</Header>
       <Modal.Content>
         <Modal.Description>
           <Input
-          fluid
-          autoFocus
-          focus
-          onChange={(evt, data) => {evt.persist(); console.log(evt); setTitle(evt.target.value)}}
-          placeholder={text}
-          value={newTitle} />
+            fluid
+            autoFocus
+            focus
+            onChange={(evt) => setTitle(evt.target.value)}
+            placeholder={text}
+            value={newTitle} />
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
@@ -30,7 +30,10 @@ export default function PopOverRequest ({text = '', buttonText = 'Click Me', onC
         }}>
           <Icon name='remove' /> Cancel
         </Button>
-        <Button color='green' inverted onClick={() => onChange(newTitle)}>
+        <Button color='green' inverted onClick={() => {
+          onChange(newTitle);
+          setOpen(false);
+        }}>
           <Icon name='checkmark' /> Accept
         </Button>
       </Modal.Actions>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Grid, Transition, Accordion, Button, Icon} from 'semantic-ui-react';
 import {connect} from 'react-redux';
-import {addRulePlaylist, removeRulePlaylist, removePlaylist, updateRuleByIndex} from '../store/actions/smartPlaylists';
+import {addRulePlaylist, removeRulePlaylist, removePlaylist, updatePlaylist} from '../store/actions/smartPlaylists';
 import { removeSmartPlaylist } from '../thunks/deleteSmartPlaylists';
 import { updatePlaylistRule, savePlaylist } from '../thunks/smartPlaylists';
 import Options from './ListSmartPlaylists_Options.jsx';
@@ -25,6 +25,7 @@ class Playlist_Item extends React.Component {
     this.deletePlaylist = this.deletePlaylist.bind(this);
     this.handleUpdateRule = this.handleUpdateRule.bind(this);
     this.handlePlaylistSave = this.handlePlaylistSave.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
   }
 
   handleOptionChange(index) {
@@ -55,6 +56,12 @@ class Playlist_Item extends React.Component {
     savePlaylist(this.props.playlist);
   }
 
+  handleTitleChange (newTitle) {
+    const playlist = this.props.playlist;
+    playlist.name = newTitle;
+    this.props.updatePlaylist(playlist);
+  }
+
   render () {
     const {
       state: { isVisibleRules, displayOptions, subpanelIndex },
@@ -70,6 +77,7 @@ class Playlist_Item extends React.Component {
               handleChange={this.deletePlaylist}
               handlePlaylistSave={this.handlePlaylistSave}
               modified={playlist.modified}
+              onTitleChange={this.handleTitleChange}
             />
           </Grid.Row>
           <Grid.Row>
@@ -122,7 +130,7 @@ Playlist_Item.propTypes = {
 };
 
 const mapDispatchToProps = {
-  addRulePlaylist, removeRulePlaylist, removePlaylist
+  addRulePlaylist, removeRulePlaylist, removePlaylist, updatePlaylist
 };
 
 export default connect(null, mapDispatchToProps)(Playlist_Item);
