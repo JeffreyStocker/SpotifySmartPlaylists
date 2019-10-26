@@ -7,7 +7,7 @@ import {
   SET_ALL_PLAYLISTS,
   REMOVE_PLAYLIST_BY_INDEX,
   UPDATE_PLAYLIST_RULE_BY_INDEX
-} from '../actions/smartPlaylists'
+} from '../actions/smartPlaylists';
 
 const defaultPlaylist = function () {
   return {
@@ -27,8 +27,8 @@ const defaultPlaylist = function () {
         },
       }
     },
-  }
-}
+  };
+};
 
 const defaultRule = function () {
   return {
@@ -36,93 +36,98 @@ const defaultRule = function () {
     target: '',
     mod: '',
     filter: []
-  }
-}
+  };
+};
 
 const reducer = function (state = [], action) {
   const {type, payload = {}} = action;
   let newState, origPlaylist;
   let {playlist, index, rule} = payload;
 
-  switch(type) {
-    case ADD_PLAYLIST:
-      if (payload.index === null) {
-        let playlist = payload.playlistData ? payload.playlistData : defaultPlaylist();
-        newState = [...state, playlist];
-      } else (
-        newState = [...state.slice(0, payload.index),  playlist, ...state.slice(payload.index)]
-      )
+  switch (type) {
+  case ADD_PLAYLIST:
+    playlist.modified = playlist.modified === false ? undefined : true;
+    if (payload.index === null) {
+      let playlist = payload.playlistData ? payload.playlistData : defaultPlaylist();
+      newState = [...state, playlist];
+    } else {
+      newState = [...state.slice(0, payload.index), playlist, ...state.slice(payload.index)];
+    }
 
-      break;
+    break;
 
-    case REMOVE_PLAYLIST_BY_INDEX:
-      newState = [...state.slice(0, payload.index), ...state.slice(payload.index + 1)]
-      break;
+  case REMOVE_PLAYLIST_BY_INDEX:
+    newState = [...state.slice(0, payload.index), ...state.slice(payload.index + 1)];
+    break;
 
-    case REMOVE_PLAYLIST:
-      newState  = state.reduce ((acc, statePlaylist) => {
-        if (statePlaylist !== playlist) {
-          acc.push(statePlaylist);
-        }
-        return acc;
-      }, [])
-      break
+  case REMOVE_PLAYLIST:
+    newState = state.reduce ((acc, statePlaylist) => {
+      if (statePlaylist !== playlist) {
+        acc.push(statePlaylist);
+      }
+      return acc;
+    }, []);
+    break;
 
-    case UPDATE_PLAYLIST:
-      newState = state.map(oldPlaylist => {
-        return oldPlaylist._id === playlist._id ? playlist : oldPlaylist;
-      })
-      break;
+  case UPDATE_PLAYLIST:
+    playlist.modified = playlist.modified === false ? undefined : true;
+    newState = state.map(oldPlaylist => {
+      return oldPlaylist._id === playlist._id ? playlist : oldPlaylist;
+    });
+    break;
 
-    case ADD_RULE_PLAYLIST:
-      ({index, playlist: origPlaylist} = payload)
+  case ADD_RULE_PLAYLIST:
+    playlist.modified = playlist.modified === false ? undefined : true;
 
-      newState = state.map((playlist) => {
-        const rules = playlist.rules;
+    ({index, playlist: origPlaylist} = payload);
 
-        if (playlist === origPlaylist) {
-          if (payload.index === -1) {
+    newState = state.map((playlist) => {
+      const rules = playlist.rules;
+
+      if (playlist === origPlaylist) {
+        if (payload.index === -1) {
           playlist.rules = [{}, ...rules];
-          } else {
-            playlist.rules = [...rules.slice(0, index), {}, ...rules.slice(index)]
-          }
+        } else {
+          playlist.rules = [...rules.slice(0, index), {}, ...rules.slice(index)];
         }
-        return playlist;
-      })
-      break;
+      }
+      return playlist;
+    });
+    break;
 
-    case REMOVE_RULE_PLAYLIST:
+  case REMOVE_RULE_PLAYLIST:
+    ({playlist: origPlaylist} = payload);
+    playlist.modified = playlist.modified === false ? undefined : true;
 
-      ({playlist: origPlaylist} = payload);
+    newState = state.map((playlist) => {
+      const rules = playlist.rules;
 
-      newState = state.map((playlist) => {
-        const rules = playlist.rules;
+      if (playlist === origPlaylist) {
+        playlist.rules = [...rules.slice(0, index), ...rules.slice(index + 1)];
+      }
+      return playlist;
+    });
+    break;
 
-        if (playlist === origPlaylist) {
-          playlist.rules = [...rules.slice(0, index), ...rules.slice(index + 1)]
-        }
-        return playlist;
-      })
-      break;
+  case SET_ALL_PLAYLISTS:
+    newState = payload;
+    break;
 
-    case SET_ALL_PLAYLISTS:
-      newState = payload;
-      break;
+  case UPDATE_PLAYLIST_RULE_BY_INDEX:
+    ({playlist: origPlaylist} = payload);
+    playlist.modified = playlist.modified === false ? undefined : true;
 
-    case UPDATE_PLAYLIST_RULE_BY_INDEX:
-      ({playlist: origPlaylist} = payload);
-
-      newState = state.map(oldPlaylist => {
-        if (oldPlaylist === origPlaylist) {
-          const newPlaylist = Object.assign({}, oldPlaylist)
-          newPlaylist.rules[index] = rule;
-          return newPlaylist;
-        }
-        return oldPlaylist;
-      })
-      break;
+    newState = state.map(oldPlaylist => {
+      if (oldPlaylist === origPlaylist) {
+        const newPlaylist = Object.assign({}, oldPlaylist);
+        newPlaylist.rules[index] = rule;
+        return newPlaylist;
+      }
+      return oldPlaylist;
+    });
+    break;
   }
   return newState ? newState : state;
-}
+};
 
 export default reducer;
