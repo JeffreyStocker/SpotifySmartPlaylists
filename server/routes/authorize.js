@@ -25,7 +25,8 @@ router.post('/authorize', async function (ctx, next) {
     id: userData.id,
     name: userData.display_name,
     smartPlaylists: dbData.smartPlaylists,
-    accessToken: access_token
+    accessToken: access_token,
+    accessTokenExpire: expires_in
   };
 
   ctx.session = {
@@ -42,6 +43,9 @@ router.get ('authorize/refresh', async ctx => {
       accessToken: ctx.user.accessToken,
       accessTokenExpire: ctx.user.refreshTokenExpires - (Date.now() - ctx.user.updatedAccessToken),
     }
+  } else {
+    ctx.status = 402;
+    return;
   }
 })
 
