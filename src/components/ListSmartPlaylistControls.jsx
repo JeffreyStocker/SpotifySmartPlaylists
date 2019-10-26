@@ -3,10 +3,10 @@ import {Menu, Button} from 'semantic-ui-react';
 import ButtonInButtonConfirm from './ButtonInButtonConfirm.jsx';
 import ButtonPopOver from './PopOverRequest.jsx';
 
-const PlaylistControls = function ({handleChange, ...props}) {
+const PlaylistControls = function ({handleChange, modified = false, handlePlaylistSave = () => {}, ...props}) {
   return (
     <Menu fluid secondary>
-      <Menu.Item><Button color='green' disabled>Save</Button></Menu.Item>
+      <Menu.Item><Button color='green' disabled={!modified} onClick={handlePlaylistSave}>Save</Button></Menu.Item>
       <Menu.Item><ButtonPopOver text='Enter Text for New Title' buttonText='Edit Title' /></Menu.Item>
       {/* <Menu.Item><Button>Add Rule</Button></Menu.Item> */}
       {/* <Menu.Item><Button>Change Title</Button></Menu.Item> */}

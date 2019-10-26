@@ -3,7 +3,7 @@ import {Grid, Transition, Accordion, Button, Icon} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {addRulePlaylist, removeRulePlaylist, removePlaylist, updateRuleByIndex} from '../store/actions/smartPlaylists';
 import { removeSmartPlaylist } from '../thunks/deleteSmartPlaylists';
-import { updatePlaylistRule } from '../thunks/smartPlaylists';
+import { updatePlaylistRule, savePlaylist } from '../thunks/smartPlaylists';
 import Options from './ListSmartPlaylists_Options.jsx';
 import UpAndDownArrow from './UpAndDownArrow.jsx';
 import ListSongs from './ListSongs.jsx';
@@ -24,7 +24,7 @@ class Playlist_Item extends React.Component {
     this.handleRemoveRule = this.handleRemoveRule.bind(this);
     this.deletePlaylist = this.deletePlaylist.bind(this);
     this.handleUpdateRule = this.handleUpdateRule.bind(this);
-
+    this.handlePlaylistSave = this.handlePlaylistSave.bind(this);
   }
 
   handleOptionChange(index) {
@@ -51,6 +51,10 @@ class Playlist_Item extends React.Component {
     updatePlaylistRule(this.props.playlist, index, updatedRule);
   }
 
+  handlePlaylistSave () {
+    savePlaylist(this.props.playlist);
+  }
+
   render () {
     const {
       state: { isVisibleRules, displayOptions, subpanelIndex },
@@ -61,7 +65,13 @@ class Playlist_Item extends React.Component {
     return (
       <Transition>
         <Grid container columns={7}>
-          <Grid.Row><PlaylistControls handleChange={this.deletePlaylist}></PlaylistControls></Grid.Row>
+          <Grid.Row>
+            <PlaylistControls
+              handleChange={this.deletePlaylist}
+              handlePlaylistSave={this.handlePlaylistSave}
+              modified={playlist.modified}
+            />
+          </Grid.Row>
           <Grid.Row>
             <Grid.Column width={2} onClick={(evt) => handleAddRule(evt, -1, playlist)} verticalAlign="middle">
               <Button><Icon name='plus circle'></Icon></Button>
