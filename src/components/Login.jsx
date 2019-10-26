@@ -49,8 +49,8 @@ class Login extends React.Component {
         .then(response => {
           this.setState({code: code});
           if (response.status === 200) {
-            const {id, name = 'Unnamed', smartPlaylists, acessToken} = response.data;
-            this.props.setUser({id, name, acessToken});
+            const {id, name = 'Unnamed', smartPlaylists, accessToken, accessTokenExpire} = response.data;
+            this.props.setUser({id, name, accessToken, accessTokenExpire, date: Date.now()});
             this.props.setAllPlaylists(smartPlaylists);
             localStorage.setItem('userID', id);
             console.log ('response', response.status, response.data);

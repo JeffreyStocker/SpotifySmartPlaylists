@@ -1,7 +1,6 @@
 import React from 'react';
-import {Accordion, Icon, Segment, Message, Menu, Container, Button} from 'semantic-ui-react';
+import {Accordion, Icon, Segment, Message, Menu, Container, Button, Header} from 'semantic-ui-react';
 import PlaylistItem from './ListSmartPlaylist_Item.jsx';
-import Editable from './TitleEditable.jsx';
 
 import {connect} from 'react-redux';
 import {addPlaylist, removePlaylist, updatePlaylist} from '../store/actions/smartPlaylists';
@@ -67,7 +66,7 @@ class ListSmartPlaylist extends React.Component{
             smartPlaylists.map((playlist, index) => (
               <Segment key={playlist._id}>
                 <Accordion.Title onClick={() => this.handleAccordianClick(index)} active={activeIndex === index}>
-                  <Icon name='dropdown' /><Editable text={playlist.name}/>
+                  <Header dividing><Icon name='dropdown' rotated={activeIndex === index ? null : 'clockwise'}/>{playlist.name ? playlist.name : 'Untitled Playlist'}</Header>
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === index}>
                   {activeIndex === index &&

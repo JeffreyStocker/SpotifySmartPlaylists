@@ -1,11 +1,11 @@
 import React from 'react';
-import {Grid, Transition, Accordion, Button} from 'semantic-ui-react';
+import {Grid, Transition, Accordion, Button, Icon} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {addRulePlaylist, removeRulePlaylist, removePlaylist, updateRuleByIndex} from '../store/actions/smartPlaylists';
 import { removeSmartPlaylist } from '../thunks/deleteSmartPlaylists';
 import { updatePlaylistRule } from '../thunks/smartPlaylists';
 import Options from './ListSmartPlaylists_Options.jsx';
-import UpAndDownArrow from './UpAndDownArrow.jsx'
+import UpAndDownArrow from './UpAndDownArrow.jsx';
 import ListSongs from './ListSongs.jsx';
 import PlaylistControls from './ListSmartPlaylistControls.jsx';
 import PropTypes from 'prop-types';
@@ -28,11 +28,11 @@ class Playlist_Item extends React.Component {
   }
 
   handleOptionChange(index) {
-    this.setState({subpanelIndex: this.state.subpanelIndex === index ? null : index})
+    this.setState({subpanelIndex: this.state.subpanelIndex === index ? null : index});
   }
 
   handleIsVisibleRuleChange() {
-    this.setState({isVisibleRules: !this.state.isVisibleRules})
+    this.setState({isVisibleRules: !this.state.isVisibleRules});
   }
 
   handleAddRule (evt, index) {
@@ -52,7 +52,6 @@ class Playlist_Item extends React.Component {
   }
 
   render () {
-
     const {
       state: { isVisibleRules, displayOptions, subpanelIndex },
       props: { playlist },
@@ -65,7 +64,7 @@ class Playlist_Item extends React.Component {
           <Grid.Row><PlaylistControls handleChange={this.deletePlaylist}></PlaylistControls></Grid.Row>
           <Grid.Row>
             <Grid.Column width={2} onClick={(evt) => handleAddRule(evt, -1, playlist)} verticalAlign="middle">
-              <Button>Add Rule</Button>
+              <Button><Icon name='plus circle'></Icon></Button>
             </Grid.Column>
             <Grid.Column width={4}>Primary</Grid.Column>
             <Grid.Column width={4}>Conditions</Grid.Column>
@@ -73,17 +72,6 @@ class Playlist_Item extends React.Component {
           </Grid.Row>
 
           {playlist.rules.map((rule, index) => (
-            // <Grid.Row key={Math.random()}>
-            //   <Grid.Column width={2} verticalAlign="middle">
-            //     <AddAndSubract
-            //       increase={(evt) => this.handleAddRule(evt, index)}
-            //       decrease={(evt) => this.handleRemoveRule(evt, index)}
-            //     />
-            //   </Grid.Column>
-            //   <Grid.Column width={4}><SelectModifier/></Grid.Column>
-            //   <Grid.Column width={4}><SelectModifier/></Grid.Column>
-            //   <Grid.Column width={6}><SelectModifier/></Grid.Column>
-            // </Grid.Row>
             <RuleGroup onChange={(updatedRule) => this.handleUpdateRule(index, updatedRule)} key={index} rule={rule}/>
           ))}
 
@@ -93,7 +81,7 @@ class Playlist_Item extends React.Component {
                 <Accordion.Title
                   active={subpanelIndex === 0}
                   onClick={(evt, props) => this.handleOptionChange(0)}
-                  >
+                >
                   <UpAndDownArrow isUp={displayOptions}/> Options
                 </Accordion.Title>
                 <Accordion.Content active={subpanelIndex === 0}>
@@ -103,7 +91,7 @@ class Playlist_Item extends React.Component {
                 <Accordion.Title
                   active={subpanelIndex === 1}
                   onClick={(evt, props) => this.handleOptionChange(1)}
-                  >
+                >
                   <UpAndDownArrow isUp={displayOptions}/>
                   Songs
                 </Accordion.Title>
@@ -115,16 +103,16 @@ class Playlist_Item extends React.Component {
           </Grid.Row>
         </Grid>
       </Transition>
-    )
+    );
   }
 }
 
 Playlist_Item.propTypes = {
   playlist: PropTypes.object.isRequired,
-}
+};
 
 const mapDispatchToProps = {
   addRulePlaylist, removeRulePlaylist, removePlaylist
 };
 
-export default connect(null, mapDispatchToProps)(Playlist_Item)
+export default connect(null, mapDispatchToProps)(Playlist_Item);
