@@ -4,17 +4,17 @@ import _debounce from 'lodash/debounce';
 import _escapeRegExp from 'lodash/escapeRegExp';
 import _filter from 'lodash/filter';
 
-const initialState = { isLoading: false, results: [], value: '' }
+const initialState = { isLoading: false, results: [], value: '' };
 
 class SearchableGroup extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       searchVals: [],
       isLoading: false,
       origFunc: null,
       value: '',
-    }
+    };
     this.handleRemove = this.handleRemove.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
@@ -27,10 +27,10 @@ class SearchableGroup extends React.Component {
       this.props.options().then(results => {
         const shapedResults = results.map (name => {
           return {title: name};
-        })
+        });
         this.setState({searchVals: shapedResults, isLoading: false});
-        console.log ('timer', Date.now() - timer)
-      })
+        console.log ('timer', Date.now() - timer);
+      });
     }
   }
 
@@ -42,10 +42,10 @@ class SearchableGroup extends React.Component {
       this.props.options().then(results => {
         const shapedResults = results.map (name => {
           return {title: name};
-        })
+        });
         this.setState({searchVals: shapedResults, isLoading: false});
-        console.log ('timer', Date.now() - timer)
-      })
+        console.log ('timer', Date.now() - timer);
+      });
     }
 
   }
@@ -56,25 +56,25 @@ class SearchableGroup extends React.Component {
   }
 
   handleAdd(evt, { result }) {
-    this.setState({ value: result.title })
+    this.setState({ value: result.title });
   }
 
   handleSearchChange (e, { value }) {
-    this.setState({ isLoading: true, value })
+    this.setState({ isLoading: true, value });
 
     setTimeout(() => {
-      if (this.state.value.length < 1) return this.setState(initialState)
+      if (this.state.value.length < 1) return this.setState(initialState);
 
-      const re = new RegExp(_escapeRegExp(this.state.value), 'i')
+      const re = new RegExp(_escapeRegExp(this.state.value), 'i');
       const isMatch = (result) => re.test(result.title);
-      const results = _filter(this.state.searchVals, isMatch)
-      console.log(results)
+      const results = _filter(this.state.searchVals, isMatch);
+      console.log(results);
 
       this.setState({
         isLoading: false,
         results: results,
-      })
-    }, 300)
+      });
+    }, 300);
   }
 
   render() {
@@ -113,4 +113,4 @@ class SearchableGroup extends React.Component {
 }
 
 
-export default SearchableGroup
+export default SearchableGroup;
