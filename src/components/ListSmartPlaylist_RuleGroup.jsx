@@ -14,7 +14,7 @@ const conditions = {
   text: ['includes', 'does not include', 'is', 'is not', 'contains', 'does not contain', 'starts with', 'end with'],
   booleanText: ['is', 'is not'],
   boolean: ['is true', 'is not true']
-}
+};
 
 const primary = [
   ['Artists Name', conditions.text, () => checkPromise(dexieDB.artists.orderBy('name').uniqueKeys())],
@@ -57,14 +57,14 @@ export default class RuleGroup extends React.Component {
       selectedPrimary: null,
       selectedPrimaryIndex: null,
     };
-    this.handleModifierUpdate = this.handleModifierUpdate.bind(this)
-    this.generateFields = this.generateFields.bind(this)
+    this.handleModifierUpdate = this.handleModifierUpdate.bind(this);
+    this.generateFields = this.generateFields.bind(this);
   }
 
   handleModifierUpdate(target, newVal) {
-    console.log (target, newVal)
-    const newRule = Object.assign({}, this.props.rule)
-    newRule[target] = newVal
+    console.log (target, newVal);
+    const newRule = Object.assign({}, this.props.rule);
+    newRule[target] = newVal;
     this.props.onChange(newRule);
   }
 
@@ -76,9 +76,9 @@ export default class RuleGroup extends React.Component {
           onChange={(x, y, val) => handleModifierUpdate('filter', val)}
           options={rule.target && primaryValues[rule.target][1]}
           values={rule.filter || []}
-        />
+        />;
       } else if (primaryValues[this.props.rule.target][0] === conditions.number) {
-        return <Input fluid placeholder="Number"></Input>
+        return <Input fluid placeholder="Number"></Input>;
       } else if (primaryValues[this.props.rule.target][0] === conditions.booleanText) {
         return (
           <Dropdown selection fluid inline={false} value={this.props.rule.filter}>
@@ -87,7 +87,7 @@ export default class RuleGroup extends React.Component {
               <Dropdown.Item active={this.props.rule.filter === false} onClick={() => this.handleModifierUpdate('filter', [false])}>False</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-        )
+        );
       } else if (primaryValues[this.props.rule.target][0] === conditions.boolean) {
         return null;
       }
@@ -105,8 +105,8 @@ export default class RuleGroup extends React.Component {
       <Grid.Row>
         <Grid.Column width={2} verticalAlign="middle">
           <AddAndSubract
-            increase={(evt) => this.props.handleAddRule(evt, index)}
-            decrease={(evt) => this.props.handleRemoveRule(evt, index)}
+            increase={(evt) => this.props.handleAddRule(evt)}
+            decrease={(evt) => this.props.handleRemoveRule(evt)}
           />
         </Grid.Column>
         <Grid.Column width={4}><SelectModifier
@@ -123,13 +123,13 @@ export default class RuleGroup extends React.Component {
           {this.generateFields(rule)}
         </Grid.Column>
       </Grid.Row>
-    )
+    );
   }
 }
 
 RuleGroup.propTypes = {
   // rule: PropTypes.array.isRequired
-}
+};
 
 
 /*
