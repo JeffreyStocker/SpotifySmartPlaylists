@@ -88,7 +88,7 @@ class Playlist_Item extends React.Component {
             />
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={2} onClick={(evt) => handleAddRule(evt, -1, playlist)} verticalAlign="middle">
+            <Grid.Column width={2} onClick={(evt) => handleAddRule(evt, 0, playlist)} verticalAlign="middle">
               <Button><Icon name='plus circle'></Icon></Button>
             </Grid.Column>
             <Grid.Column width={4}>Primary</Grid.Column>
@@ -97,7 +97,14 @@ class Playlist_Item extends React.Component {
           </Grid.Row>
 
           {playlist.rules.map((rule, index) => (
-            <RuleGroup onChange={(updatedRule) => this.handleUpdateRule(index, updatedRule)} key={index} rule={rule}/>
+            <RuleGroup
+              onChange={(updatedRule) => this.handleUpdateRule(index, updatedRule)}
+              handleAddRule={(evt) => this.handleAddRule(evt, index + 1)}
+              handleRemoveRule={(evt) => this.handleRemoveRule(evt, index)}
+              key={index}
+              rule={rule}
+              handle
+            />
           ))}
 
           <Grid.Row>
