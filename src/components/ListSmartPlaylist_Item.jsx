@@ -26,6 +26,7 @@ class Playlist_Item extends React.Component {
     this.handleUpdateRule = this.handleUpdateRule.bind(this);
     this.handlePlaylistSave = this.handlePlaylistSave.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleOptionValueChange = this.handleOptionValueChange.bind(this);
   }
 
   handleOptionChange(index) {
@@ -59,6 +60,12 @@ class Playlist_Item extends React.Component {
   handleTitleChange (newTitle) {
     const playlist = this.props.playlist;
     playlist.name = newTitle;
+    this.props.updatePlaylist(playlist);
+  }
+
+  handleOptionValueChange (newOptions) {
+    const playlist = this.props.playlist;
+    playlist.options = newOptions;
     this.props.updatePlaylist(playlist);
   }
 
@@ -103,7 +110,10 @@ class Playlist_Item extends React.Component {
                   <UpAndDownArrow isUp={displayOptions}/> Options
                 </Accordion.Title>
                 <Accordion.Content active={subpanelIndex === 0}>
-                  <Options options={playlist.options}></Options>
+                  <Options
+                    options={playlist.options}
+                    onChange={this.handleOptionValueChange}
+                  ></Options>
                 </Accordion.Content>
 
                 <Accordion.Title
