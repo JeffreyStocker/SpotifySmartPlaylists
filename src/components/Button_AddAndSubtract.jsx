@@ -15,7 +15,7 @@ export default function AddAndSubtrack ({
       <Button icon={icon} disabled={!increaseEnabled} onClick={increase}><Icon name="plus circle" /></Button>
       <Button icon={icon} disabled={!decreaseEnabled} onClick={decrease}><Icon name="minus circle" /></Button>
     </Button.Group>
-  )
+  );
 }
 
 AddAndSubtrack.propsTypes = {
@@ -24,4 +24,4 @@ AddAndSubtrack.propsTypes = {
   increaseEnabled: PropTypes.boolean,
   decreaseEnabled: PropTypes.boolean,
   icon: PropTypes.boolean
-}
+};

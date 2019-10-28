@@ -12,12 +12,18 @@ export async function syncDataFromSpotify (accessToken, callback) {
     const artistsIDs = new Set();
     const albumsIDs = new Set();
 
-    const likedAlbums = await getLikedAlbums(accessToken)
-    callback();
-    const likedTracks = await getLikedSongs(accessToken)
-    callback();
-    const playlists = await getPlaylists(accessToken)
-    callback();
+    try {
+      const likedAlbums = await getLikedAlbums(accessToken)
+      callback();
+      const likedTracks = await getLikedSongs(accessToken)
+      callback();
+      const playlists = await getPlaylists(accessToken)
+      callback();
+    } catch (err) {
+      if (err.status === 404) {
+
+      }
+    }
 
     const playlistTrackRequests = playlists.map(async (playlist) => {
       return await getTracksFromPlaylist(accessToken, playlist.id);
