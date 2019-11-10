@@ -30,10 +30,11 @@ const mongoose = require ('mongoose');
 
 const playlists = mongoose.Schema({
   id: String,
+  name: String,
   rules: {
     type: [{
       source: String,
-      quantifier: String,
+      mod: String,
       target: String,
     }],
     default: []
@@ -62,7 +63,7 @@ const playlists = mongoose.Schema({
         default: true,
         type: Boolean
       },
-      playLists: {
+      playlists: {
         owned: {
           default: true,
           type: Boolean
