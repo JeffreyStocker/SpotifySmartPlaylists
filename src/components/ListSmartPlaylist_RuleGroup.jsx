@@ -9,39 +9,14 @@ import dexieDB from '../services/dixieStore';
 import PropTypes from 'prop-types';
 import checkPromise from '../utilites/promiseCheck';
 
+import primary from '../Data/playlistList';
+
 const conditions = {
   number: ['greater than', 'less than', 'equal to', 'not greater to', 'is between'],
   text: ['includes', 'does not include', 'is', 'is not', 'contains', 'does not contain', 'starts with', 'end with'],
   booleanText: ['is', 'is not'],
   boolean: ['is true', 'is not true']
 };
-
-const primary = [
-  ['Artists Name', conditions.text, () => checkPromise(dexieDB.artists.orderBy('name').uniqueKeys())],
-  ['Artist Popularity', conditions.number, () => Promise.resolve([])],
-  ['Artist Followers', conditions.number, () => Promise.resolve([])],
-  ['Artist Genre', conditions.text, () => checkPromise(dexieDB.artists.orderBy('genre').uniqueKeys())],
-  ['Album Name', conditions.text, () => checkPromise(dexieDB.albums.orderBy('name').uniqueKeys())],
-  ['Album Type', conditions.booleanText, () => checkPromise(dexieDB.artists.orderBy('album_type').uniqueKeys())],
-  ['Album Release Date', conditions.number, () => Promise.resolve([])],
-  ['Album Total Tracks', conditions.number, () => Promise.resolve([])],
-  ['Album Popularity', conditions.number, () => Promise.resolve([])],
-  ['Album Label', conditions.number, () => checkPromise(dexieDB.artists.orderBy('label').uniqueKeys())],
-  ['Number of Tracks in Album', conditions.number, () => Promise.resolve([])],
-  ['Track Name', conditions.text, () => checkPromise(dexieDB.tracks.orderBy('name').uniqueKeys())],
-  ['Track Length', conditions.number, () => Promise.resolve([])],
-  ['Disc Number', conditions.number, () => Promise.resolve([])],
-  ['Track Number', conditions.number, () => Promise.resolve([])],
-  ['Explicit', conditions.booleanText, () => Promise.resolve([true, false])],
-  ['Track Popularity', conditions.number, () => Promise.resolve([])],
-  ['Date Added', conditions.number, () => Promise.resolve([])],
-  ['Playlist Followers', conditions.number, () => Promise.resolve([])],
-  ['Playlist is Public', conditions.boolean, () => Promise.resolve([])],
-  ['Playlist Owner', conditions.text, () => Promise.resolve([])],
-  ['Playlist is Collaborative', conditions.boolean, () => Promise.resolve([])],
-];
-// ['Track Genre', conditions.text, () => {}, //have to implement with a different db than spotify
-// ['Album Genre', conditions.text, () => {}], //have to implement with a different db than spotify
 
 const primaryNames = (() => primary.map(i => i[0]))();
 const primaryValues = (() => primary.reduce((acc, [key, ...rest]) => {
@@ -53,10 +28,6 @@ const primaryValues = (() => primary.reduce((acc, [key, ...rest]) => {
 export default class RuleGroup extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedPrimary: null,
-      selectedPrimaryIndex: null,
-    };
     this.handleModifierUpdate = this.handleModifierUpdate.bind(this);
     this.generateFields = this.generateFields.bind(this);
   }
@@ -73,22 +44,22 @@ export default class RuleGroup extends React.Component {
       if (primaryValues[this.props.rule.target][0] === conditions.text) {
         return <Search
           fluid
-          onChange={(x, y, val) => handleModifierUpdate('filter', val)}
+          onChange={(x, y, val) => this.handleModifierUpdate('source', val)}
           options={rule.target && primaryValues[rule.target][1]}
-          values={rule.filter || []}
+          items={rule.source || []}
         />;
-      } else if (primaryValues[this.props.rule.target][0] === conditions.number) {
-        return <Input fluid placeholder="Number"></Input>;
-      } else if (primaryValues[this.props.rule.target][0] === conditions.booleanText) {
+      } else if (primaryValues[rule.target][0] === conditions.number) {
+        return <Input fluid placeholder="Number" onKeyPress={(evt) => {evt.persist(); console.log (evt)}}></Input>;
+      } else if (primaryValues[rule.target][0] === conditions.booleanText) {
         return (
-          <Dropdown selection fluid inline={false} value={this.props.rule.filter}>
-            <Dropdown.Menu value={this.props.rule.filter}>
-              <Dropdown.Item active={this.props.rule.filter === true} onClick={() => this.handleModifierUpdate('filter', [true])}>True</Dropdown.Item>
-              <Dropdown.Item active={this.props.rule.filter === false} onClick={() => this.handleModifierUpdate('filter', [false])}>False</Dropdown.Item>
+          <Dropdown selection fluid inline={false} value={rule.source}>
+            <Dropdown.Menu value={rule.source}>
+              <Dropdown.Item active={rule.source === true} onClick={() => this.handleModifierUpdate('filter', [true])}>True</Dropdown.Item>
+              <Dropdown.Item active={rule.source === false} onClick={() => this.handleModifierUpdate('filter', [false])}>False</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         );
-      } else if (primaryValues[this.props.rule.target][0] === conditions.boolean) {
+      } else if (primaryValues[rule.target][0] === conditions.boolean) {
         return null;
       }
     }
@@ -97,7 +68,6 @@ export default class RuleGroup extends React.Component {
   render() {
     const {
       props: {rule},
-      state: {selectedPrimary, selectedPrimaryIndex},
       handleModifierUpdate
     } = this;
 
@@ -109,17 +79,17 @@ export default class RuleGroup extends React.Component {
             decrease={(evt) => this.props.handleRemoveRule(evt)}
           />
         </Grid.Column>
-        <Grid.Column width={4}><SelectModifier
+        <Grid.Column width={4}><SelectModifier /* target */
           onChange={(x, y, val) => handleModifierUpdate('target', val)}
           options={primaryNames}
           value={rule.target}
         /></Grid.Column>
-        <Grid.Column width={4}><SelectModifier
+        <Grid.Column width={4}><SelectModifier /* mod */
           onChange={(x, y, val) => handleModifierUpdate('mod', val)}
           options={rule.target && primaryValues[rule.target][0]}
           value={rule.mod}
         /></Grid.Column>
-        <Grid.Column width={6}>
+        <Grid.Column width={6}> {/* source */}
           {this.generateFields(rule)}
         </Grid.Column>
       </Grid.Row>
@@ -128,23 +98,5 @@ export default class RuleGroup extends React.Component {
 }
 
 RuleGroup.propTypes = {
-  // rule: PropTypes.array.isRequired
+  rule: PropTypes.object.isRequired
 };
-
-
-/*
-
-<ComplexSelection
-          onChange={(x, y, val) => handleModifierUpdate('filter', val)}
-          options={rule.target && primaryValues[rule.target][1]}
-          value={rule.filter}
-        />
-
-rule example = {
-  isSubrule: false,
-  target: null,
-  mod: null,
-  filter: ''
-}
-
-*/

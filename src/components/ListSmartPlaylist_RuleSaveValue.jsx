@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Search, Label, Icon} from 'semantic-ui-react';
+import {Container, Search, Label, Icon, Segment} from 'semantic-ui-react';
 import _debounce from 'lodash/debounce';
 import _escapeRegExp from 'lodash/escapeRegExp';
 import _filter from 'lodash/filter';
@@ -16,8 +16,12 @@ class SearchableGroup extends React.Component {
       value: '',
     };
     this.handleRemove = this.handleRemove.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSearchChange = this.handleSearchKeyPress.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.handleInputUpdate = this.handleInputUpdate.bind(this);
+    this.startSearch = this.startSearch.bind(this);
+
+    this.debouncedSearch = _debounce(this.startSearch, 500, { leading: true });
   }
 
   componentWillMount() {
@@ -56,11 +60,12 @@ class SearchableGroup extends React.Component {
   }
 
   handleAdd(evt, { result }) {
-    this.setState({ value: result.title });
+    this.setState({value: ''})
+    this.props.items.push(result);
+    this.props.onChange && this.props.onChange(evt, this.props.items);
   }
 
-  handleSearchChange (e, { value }) {
-    this.setState({ isLoading: true, value });
+  startSearch() {
 
     setTimeout(() => {
       if (this.state.value.length < 1) return this.setState(initialState);
@@ -68,7 +73,6 @@ class SearchableGroup extends React.Component {
       const re = new RegExp(_escapeRegExp(this.state.value), 'i');
       const isMatch = (result) => re.test(result.title);
       const results = _filter(this.state.searchVals, isMatch);
-      console.log(results);
 
       this.setState({
         isLoading: false,
@@ -77,31 +81,48 @@ class SearchableGroup extends React.Component {
     }, 300);
   }
 
+  handleInputUpdate(evt, {value}) {
+    this.setState({ isLoading: true, value });
+    this.debouncedSearch();
+  }
+
+  handleSearchKeyPress (evt) {
+    if (evt.key === 'enter') {
+      this.debouncedSearch.cancel();
+      this.handleAdd(evt, {result: this.state.value});
+    }
+  }
+
+  handleSearchPress(evt) {
+
+  }
+
   render() {
     const {
-      props: {values, showNoSearchResults},
+      props: {items = []},
       state: {isLoading, value, results},
       handleRemove,
       handleAdd,
-      handleSearchChange
+      handleSearchKeyPress,
+      handleInputUpdate
     } = this;
 
     return (
       <Container fluid>
         <Search
           fluid
+          className='searchBox'
+          input={{fluid: true, onKeyPress: handleSearchKeyPress}} //makes parent search fluid, not in docs
           loading={isLoading}
+          showNoResults={isLoading}
           onResultSelect={handleAdd}
-          showNoResults={showNoSearchResults}
-          onSearchChange={_debounce(handleSearchChange, 500, {
-            leading: true,
-          })}
-
+          onSearchChange={handleInputUpdate}
           results={results}
           value={value}
         ></Search>
+
         <Container>
-          {values.map((name, index) => (
+          {items.map((name, index) => (
             <Label>{name}<Icon name='delete' onClick={(evt) => handleRemove(evt, index)} /></Label>
           ))}
         </Container>
