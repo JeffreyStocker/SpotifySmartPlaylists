@@ -9,7 +9,7 @@ import dexieDB from '../services/dixieStore';
 import PropTypes from 'prop-types';
 import checkPromise from '../utilites/promiseCheck';
 
-import primary from '../Data/playlistList';
+import primary from '../Data/playlistRuleDropdownOptions';
 
 const conditions = {
   number: ['greater than', 'less than', 'equal to', 'not greater to', 'is between'],
