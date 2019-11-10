@@ -25,3 +25,10 @@ export default dropdownOptions = [
 
 // ['Track Genre', conditions.text, () => {}, //have to implement with a different db than spotify
 // ['Album Genre', conditions.text, () => {}], //have to implement with a different db than spotify
+
+export const conditions = {
+  number: ['greater than', 'less than', 'equal to', 'not greater to', 'is between'],
+  text: ['includes', 'does not include', 'is', 'is not', 'contains', 'does not contain', 'starts with', 'end with'],
+  booleanText: ['is', 'is not'],
+  boolean: ['is true', 'is not true']
+};

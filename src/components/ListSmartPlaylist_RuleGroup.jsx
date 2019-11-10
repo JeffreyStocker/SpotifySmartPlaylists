@@ -9,14 +9,9 @@ import dexieDB from '../services/dixieStore';
 import PropTypes from 'prop-types';
 import checkPromise from '../utilites/promiseCheck';
 
-import primary from '../Data/playlistRuleDropdownOptions';
+import primary, {conditions} from '../Data/playlistRuleDropdownOptions';
 
-const conditions = {
-  number: ['greater than', 'less than', 'equal to', 'not greater to', 'is between'],
-  text: ['includes', 'does not include', 'is', 'is not', 'contains', 'does not contain', 'starts with', 'end with'],
-  booleanText: ['is', 'is not'],
-  boolean: ['is true', 'is not true']
-};
+
 
 const primaryNames = (() => primary.map(i => i[0]))();
 const primaryValues = (() => primary.reduce((acc, [key, ...rest]) => {
