@@ -29,6 +29,10 @@ const artists = [
   {
     name: 'Happy Crazy',
     id: Math.random()
+  },
+  {
+    name: 'Dragonforce',
+    id: Math.random()
   }
 ]
 beforeAll(async () => {
@@ -44,13 +48,13 @@ describe('processRules tests', () => {
 
   describe('systemic tests', () => {
     test('should return a promise', () => {
-      const test = processRules(['Artists Name', 'includes', ['test']])
+      const test = processRules([{source: 'Artist Name', mod: 'is',target: ['DragonForce']}])
       expect(test).toEqual(expect.any(Promise));
       return test;
     });
 
     test('should resolve into an array', () => {
-      return processRules(['ytes', 'no'])
+      return processRules([{source: 'Artist Name', mod: 'is',target: ['DragonForce']}])
         .then(results => {
           expect(results).toStrictEqual(expect.any(Array));
         })
@@ -58,12 +62,15 @@ describe('processRules tests', () => {
 
     describe('data tests', () => {
       describe('positive tests', () => {
-        test('should return all artists with name dragonforce', () => {
-          return processRules ([{source: 'Artist Name', mod: 'is',target: 'DragonForce'}])
+        test.only('should return all tracks with name dragonforce', () => {
+          return processRules ([{source: 'Artist Name', mod: 'is',target: ['DragonForce']}])
             .then(results => {
-              expect(results.length).toBeGreaterThan(0);
+              expect(results.length).toBe(1);
             })
+        })
 
+        test.only('wait', () => {
+          expect(5).toBe(5);
         })
       })
     })
