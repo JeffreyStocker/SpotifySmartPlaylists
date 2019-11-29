@@ -1,5 +1,9 @@
-.flex {
+/* .flex {
   display: inline-flex;
   flex-flow: row wrap;
   justify-content: space-around;
+} */
+
+.searchBox input{
+  border-radius: .28571429rem !important;
 }
