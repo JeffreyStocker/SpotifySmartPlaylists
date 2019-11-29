@@ -6,7 +6,14 @@ import ButtonPopOver from './PopOverRequest.jsx';
 const PlaylistControls = function ({handleChange, onTitleChange = () =>{}, modified = false, handlePlaylistSave = () => {}, ...props}) {
   return (
     <Menu fluid secondary>
-      <Menu.Item><Button color='green' disabled={!modified} onClick={handlePlaylistSave}>Save</Button></Menu.Item>
+      <Menu.Item><Button
+        color='green'
+        style={{cursor: 'not-allowed !important', 'pointerEvents': 'all !important'}}
+        disabled={!modified}
+        onClick={handlePlaylistSave}
+      >
+        Save
+      </Button></Menu.Item>
       <Menu.Item><ButtonPopOver onChange={onTitleChange} text='Enter Text for New Title' buttonText='Edit Title' /></Menu.Item>
       {/* <Menu.Item><Button>Add Rule</Button></Menu.Item> */}
       {/* <Menu.Item><Button>Change Title</Button></Menu.Item> */}
