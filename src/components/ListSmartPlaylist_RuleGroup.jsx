@@ -5,7 +5,6 @@ import AddAndSubract from './Button_AddAndSubtract.jsx';
 import ComplexSelection from './ListSmartPlaylists_ComplexMod.jsx';
 import Search from './ListSmartPlaylist_RuleSaveValue.jsx';
 
-import dexieDB from '../services/dixieStore';
 import PropTypes from 'prop-types';
 import checkPromise from '../utilites/promiseCheck';
 
