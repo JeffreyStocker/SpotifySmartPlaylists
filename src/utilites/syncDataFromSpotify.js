@@ -8,33 +8,29 @@ import {addTracksToPlaylist} from '../utilites/processSpotifyData';
 
 export async function syncDataFromSpotify (accessToken, callback) {
   try {
-
+    let playlists, likedTracks, likedAlbums;
     const artistsIDs = new Set();
     const albumsIDs = new Set();
 
     try {
-      const likedAlbums = await getLikedAlbums(accessToken)
+      likedAlbums = await getLikedAlbums(accessToken)
       callback();
-      const likedTracks = await getLikedSongs(accessToken)
+      likedTracks = await getLikedSongs(accessToken)
       callback();
-      const playlists = await getPlaylists(accessToken)
+      playlists = await getPlaylists(accessToken)
       callback();
     } catch (err) {
       if (err.status === 404) {
-
       }
     }
-
     const playlistTrackRequests = playlists.map(async (playlist) => {
       return await getTracksFromPlaylist(accessToken, playlist.id);
     })
 
     const playlistTracks = await Promise.all(playlistTrackRequests);
-
     const uniqueTracks = addTracksToPlaylist(playlists, playlistTracks);
 
     callback();
-
     dexieDB.albums.bulkPut(likedAlbums.map(({album}) => album))
       .catch(err => console.error('album save', err));
 
