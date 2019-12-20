@@ -1,17 +1,18 @@
 
 
 export default function getSpotifyData () {
-  try {
+  let playlists, likedTracks, likedAlbums;
 
+  try {
     const artists = new Set();
     const albums = new Set();
 
     const token = this.props.user.accessToken;
-    const likedAlbums = await getLikedAlbums(token)
+    likedAlbums = await getLikedAlbums(token)
     this.increaseStep();
-    const likedTracks = await getLikedSongs(token)
+    likedTracks = await getLikedSongs(token)
     this.increaseStep();
-    const playlists = await getPlaylists(token)
+    playlists = await getPlaylists(token)
     this.increaseStep();
 
     const likedAlbumsRemovedExtra = likedAlbums.map(({album}) => {
