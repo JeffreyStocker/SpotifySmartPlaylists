@@ -6,7 +6,7 @@ const databases = {
 
 export const conditions = {
   number: ['greater than', 'less than', 'equal to', 'greater or equal than', 'less or equal than', 'is between'],
-  text: ['includes', 'does not include', 'is', 'is not',  'starts with', 'end with'],
+  text: ['includes', 'does not include', 'is', 'is not', 'starts with', 'ends with'],
   booleanText: ['is', 'is not'],
   boolean: ['is true', 'is not true']
 };
@@ -36,7 +36,7 @@ const searchConditions = function (mod, target, source) {
     break;
   case 'includes':
     searchTerm = new RegExp(source);
-    isTrueOrFalse = ('' + target).search(searchTerm) !== -1;
+    isTrueOrFalse = [('' + target).search(searchTerm) !== -1, {or: true}];
     break;
   case 'does not include':
     searchTerm = new RegExp(source);
