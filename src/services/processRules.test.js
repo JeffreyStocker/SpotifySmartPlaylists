@@ -35,6 +35,7 @@ const artists = [
     id: Math.random()
   }
 ]
+
 beforeAll(async () => {
   await dexieStore.artists.bulkAdd(artists);
   // await dexieStore.artists.bulkAdd(mockArtistData.artists);
@@ -62,15 +63,32 @@ describe('processRules tests', () => {
 
     describe('data tests', () => {
       describe('positive tests', () => {
-        test.only('should return all tracks with name dragonforce', () => {
+        test('should return all tracks with name dragonforce', () => {
           return processRules ([{source: 'Artist Name', mod: 'is',target: ['DragonForce']}])
             .then(results => {
               expect(results.length).toBe(1);
             })
         })
 
-        test.only('wait', () => {
-          expect(5).toBe(5);
+        test('should return all tracks with name DragonForce and Dragonforce', () => {
+          const targets = ['DragonForce', 'Dragonforce'];
+          return processRules([
+            {source: 'Artist Name', mod: 'is', target: targets[0]},
+            {source: 'Artist Name', mod: 'is', target: targets[1]}
+          ])
+            .then(results => {
+              expect(results).toHaveLength(0);
+            })
+        })
+        test('should return tracks with name DragonForce or Dragonforce', () => {
+          const targets = ['DragonForce', 'Dragonforce'];
+          return processRules([{source: 'Artist Name', mod: 'includes', target: targets}])
+            .then(results => {
+              expect(results).toHaveLength(2);
+              for (let item of results) {
+                expect(item.name).toEqual(expect.arrayContaining(targets));
+              }
+            })
         })
       })
     })
